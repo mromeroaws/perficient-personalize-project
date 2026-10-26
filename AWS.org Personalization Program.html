@@ -1,0 +1,656 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>AWS.org Personalization Program</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a project dossier — navy spec-plate header, sticky section nav, then stacked working sections on a cool steel ground */
+:root{
+  --bg:#F3F6F9; --surface:#FFFFFF; --sunk:#E9EEF3; --ink:#0E1E2F; --muted:#56667A; --line:#D6DEE7;
+  --band:#002B54; --band-ink:#FFFFFF; --band-muted:#A9BED3;
+  --accent:#F58025; --accent-ink:#A84E0B; --accent-soft:#FDEBDC;
+  --ok:#1D7A4C; --ok-soft:#DDF1E6; --warn:#9A6410; --warn-soft:#FBEFD7; --crit:#B4372A; --crit-soft:#F8E1DE; --info:#24609E; --info-soft:#DEEAF6;
+  --aws:#002B54; --prf:#6A4FB0; --joint:#1D7A4C;
+  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#09141F; --surface:#0F2133; --sunk:#0C1B2A; --ink:#E5ECF4; --muted:#98A9BC; --line:#22384F;
+  --band:#0B2A4A; --band-ink:#FFFFFF; --band-muted:#9DB4CC;
+  --accent:#F7914A; --accent-ink:#F9A666; --accent-soft:#3A2414;
+  --ok:#53C38E; --ok-soft:#123323; --warn:#E3B358; --warn-soft:#33270F; --crit:#F07B6E; --crit-soft:#3A1A17; --info:#7CB1EA; --info-soft:#132A42;
+  --aws:#7CB1EA; --prf:#B39DF0; --joint:#53C38E; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#09141F; --surface:#0F2133; --sunk:#0C1B2A; --ink:#E5ECF4; --muted:#98A9BC; --line:#22384F;
+  --band:#0B2A4A; --band-ink:#FFFFFF; --band-muted:#9DB4CC;
+  --accent:#F7914A; --accent-ink:#F9A666; --accent-soft:#3A2414;
+  --ok:#53C38E; --ok-soft:#123323; --warn:#E3B358; --warn-soft:#33270F; --crit:#F07B6E; --crit-soft:#3A1A17; --info:#7CB1EA; --info-soft:#132A42;
+  --aws:#7CB1EA; --prf:#B39DF0; --joint:#53C38E; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.1}
+h2{font-size:clamp(28px,4vw,36px);letter-spacing:.01em;text-transform:uppercase;color:var(--ink)}
+h3{font-size:21px;letter-spacing:.01em}
+p{margin:0}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-ink)}
+.muted{color:var(--muted)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+a{color:var(--info)}
+button,select{font:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Header band */
+.band{background:var(--band);color:var(--band-ink);position:relative;overflow:hidden}
+.band::after{content:"";position:absolute;right:-60px;bottom:-60px;width:200px;height:200px;background:var(--accent);transform:rotate(45deg);opacity:.95}
+.band .wrap{padding-block:36px 30px;display:grid;gap:22px;position:relative;z-index:1}
+.band h1{font-size:clamp(34px,6vw,58px);text-transform:uppercase;letter-spacing:.005em;max-width:16ch}
+.band .eyebrow{color:var(--accent)}
+.band .sub{color:var(--band-muted);max-width:68ch}
+.plate{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.18);max-width:880px}
+.plate div{background:var(--band);padding:10px 14px;display:grid;gap:2px}
+.plate dt{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--band-muted)}
+.plate dd{margin:0;font-weight:600}
+
+/* Sticky nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:12px;padding-block:8px}
+.nav-links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{white-space:nowrap;text-decoration:none;color:var(--muted);font-weight:600;font-size:14px;padding:6px 10px;border-radius:4px}
+.nav-links a:hover,.nav-links a.on{color:var(--ink);background:var(--sunk)}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:6px 12px;border-radius:4px;font-weight:600;font-size:14px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#1B1206}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--muted)}
+
+section{padding-block:44px;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+.sec-head{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+
+/* Status hero */
+.now{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px}
+@media (max-width:820px){.now{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:20px;display:grid;gap:14px;align-content:start;min-width:0}
+.bigweek{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.bigweek b{font-family:var(--f-display);font-size:64px;line-height:.9}
+.seam{display:grid;grid-template-columns:repeat(13,1fr);gap:3px}
+.seam span{height:14px;background:var(--sunk);border-radius:2px;position:relative}
+.seam span.done{background:var(--band)}
+:root[data-theme="dark"] .seam span.done{background:var(--info)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .seam span.done{background:var(--info)}}
+.seam span.cur{background:var(--accent)}
+.seam-lbl{display:grid;grid-template-columns:4fr 4fr 5fr;font-family:var(--f-mono);font-size:11px;color:var(--muted);gap:3px}
+.seam-lbl span{border-top:2px solid var(--line);padding-top:4px}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.kpi{background:var(--sunk);border-radius:4px;padding:12px;display:grid;gap:2px}
+.kpi b{font-family:var(--f-display);font-size:30px;line-height:1}
+.kpi small{color:var(--muted);font-size:13px}
+.callout{border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 14px;border-radius:0 4px 4px 0}
+
+/* Pills */
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap;font-family:var(--f-body)}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.s-ok{color:var(--ok);background:var(--ok-soft)} .s-warn{color:var(--warn);background:var(--warn-soft)}
+.s-crit{color:var(--crit);background:var(--crit-soft)} .s-info{color:var(--info);background:var(--info-soft)}
+.s-mute{color:var(--muted);background:var(--sunk)}
+.own{font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:3px;border:1px solid currentColor;white-space:nowrap}
+.own.aws{color:var(--aws)} .own.prf{color:var(--prf)} .own.joint{color:var(--joint)}
+
+/* Gantt */
+.gantt-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.gantt{min-width:760px;position:relative}
+.g-row{display:grid;grid-template-columns:260px 1fr;border-bottom:1px solid var(--line);cursor:pointer}
+.g-row:last-child{border-bottom:0}
+.g-row:hover{background:var(--sunk)}
+.g-row.head{cursor:default;background:var(--sunk);font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.g-name{padding:10px 12px;font-weight:600;font-size:14px;display:grid;gap:2px}
+.g-name small{font-weight:400;color:var(--muted);font-size:12px}
+.g-track{display:grid;grid-template-columns:repeat(13,1fr);position:relative;align-items:center}
+.g-track .wk{height:100%;border-left:1px dashed var(--line);display:grid;place-items:center;text-align:center;padding:4px 0;line-height:1.2}
+.g-bar{grid-row:1;height:18px;border-radius:3px;margin:0 3px;align-self:center}
+.g-bar.past{background:var(--band)} .g-bar.live{background:var(--accent)} .g-bar.next{background:var(--line)}
+:root[data-theme="dark"] .g-bar.past{background:#3B6A99}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .g-bar.past{background:#3B6A99}}
+.g-today{position:absolute;top:0;bottom:0;width:2px;background:var(--accent);pointer-events:none;z-index:2}
+.g-today::before{content:"TODAY";position:absolute;top:2px;left:4px;font-family:var(--f-mono);font-size:10px;color:var(--accent-ink);font-weight:500;letter-spacing:.08em;background:var(--surface);padding:0 3px}
+.g-detail{grid-column:1/-1;padding:0 12px 12px 12px;font-size:14px;color:var(--muted)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:10px}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.term-strip{margin-top:18px;display:grid;gap:6px}
+.term{display:flex;height:26px;border-radius:4px;overflow:hidden;font-family:var(--f-mono);font-size:11px}
+.term span{display:flex;align-items:center;padding:0 8px;white-space:nowrap;overflow:hidden}
+
+/* Deliverables */
+.dl{display:grid;gap:10px}
+.dl-item{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:14px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px}
+.dl-no{font-family:var(--f-display);font-size:30px;color:var(--accent-ink);line-height:1}
+.dl-body{display:grid;gap:4px;min-width:0}
+.dl-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--muted)}
+.dl-side{display:grid;gap:6px;justify-items:end}
+.dl-side select{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:4px;padding:4px 6px;font-size:13px}
+@media (max-width:640px){.dl-item{grid-template-columns:36px minmax(0,1fr)}.dl-side{grid-column:2;justify-items:start}}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:820px){.two{grid-template-columns:1fr}}
+.list{list-style:none;margin:0;padding:0;display:grid}
+.list li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.list li:last-child{border-bottom:0}
+.tick{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;margin-top:2px}
+.tick.ok{background:var(--ok-soft);color:var(--ok)} .tick.open{background:var(--warn-soft);color:var(--warn)} .tick.q{background:var(--info-soft);color:var(--info)}
+
+/* Next steps */
+.steps{display:grid;gap:0;counter-reset:st}
+.step{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);align-items:start}
+.step:last-child{border-bottom:0}
+.step input{width:20px;height:20px;margin-top:3px;accent-color:var(--accent);cursor:pointer}
+.step.done .st-title{text-decoration:line-through;color:var(--muted)}
+.st-title{font-weight:600}
+.st-desc{font-size:14px;color:var(--muted)}
+.st-side{display:grid;gap:6px;justify-items:end;text-align:right}
+@media (max-width:640px){.step{grid-template-columns:28px minmax(0,1fr)}.st-side{grid-column:2;justify-items:start;text-align:left;display:flex;gap:8px;flex-wrap:wrap}}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--band);border-color:var(--band);color:var(--band-ink)}
+:root[data-theme="dark"] .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#1B1206}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#1B1206}}
+
+/* Personas */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-family:var(--f-mono);font-size:12px;margin-bottom:20px}
+.flow span{background:var(--surface);border:1px solid var(--line);padding:6px 10px;border-radius:4px}
+.flow i{font-style:normal;color:var(--accent-ink)}
+.p-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.p-card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:10px;align-content:start}
+.p-card header{display:flex;justify-content:space-between;gap:8px;align-items:start}
+.p-card dl{margin:0;display:grid;gap:6px;font-size:14px}
+.p-card dt{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.p-card dd{margin:0 0 4px}
+.cta{display:inline-block;background:var(--accent);color:#1B1206;font-weight:700;font-size:13px;padding:5px 12px;border-radius:3px;justify-self:start}
+.tag{font-family:var(--f-mono);font-size:11px;background:var(--sunk);color:var(--ink);padding:2px 6px;border-radius:3px;white-space:nowrap}
+.groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.group{border:1px dashed var(--line);border-radius:6px;padding:12px 14px;display:grid;gap:6px;background:var(--surface)}
+.group b{font-size:15px}
+.group .tags{display:flex;gap:4px;flex-wrap:wrap}
+.ind{display:flex;flex-wrap:wrap;gap:6px}
+
+/* Journeys */
+.bars{display:grid;gap:8px}
+.bar-row{display:grid;grid-template-columns:200px minmax(0,1fr) 64px;gap:12px;align-items:center;font-size:14px}
+.bar-row .lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{height:20px;background:var(--sunk);border-radius:3px;position:relative}
+.bar-fill{height:100%;background:var(--band);border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;color:var(--band-ink);font-family:var(--f-mono);font-size:11px;min-width:fit-content}
+:root[data-theme="dark"] .bar-fill{background:#2E5F8F}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .bar-fill{background:#2E5F8F}}
+.eng{font-family:var(--f-mono);font-size:12px;text-align:right;font-weight:500}
+.eng.low{color:var(--crit)} .eng.mid{color:var(--warn)} .eng.hi{color:var(--ok)}
+@media (max-width:640px){.bar-row{grid-template-columns:minmax(0,1fr) 56px}.bar-row .bar-track{grid-column:1/-1;grid-row:2}}
+.jy{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.jy div{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px;display:grid;gap:6px}
+.jy small{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:14px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--sunk);font-weight:500}
+tr:last-child td{border-bottom:0}
+
+/* Scope / risks */
+.scope{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+@media (max-width:820px){.scope{grid-template-columns:1fr}}
+.risk{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.risk:last-child{border-bottom:0}
+.sev{width:8px;border-radius:4px;align-self:stretch}
+.sev.h{background:var(--crit)} .sev.m{background:var(--warn)} .sev.l{background:var(--info)}
+.budget-bars{display:grid;gap:8px}
+.bb{display:grid;grid-template-columns:150px minmax(0,1fr) 92px;gap:10px;align-items:center;font-size:14px}
+.bb .bar-track{height:14px}
+.bb .bar-fill{background:var(--prf)}
+@media (max-width:500px){.bb{grid-template-columns:minmax(0,1fr) 84px}.bb .bar-track{grid-column:1/-1;grid-row:2}}
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px 24px;margin:0}
+.gloss div{display:grid;gap:2px}
+.gloss dt{font-weight:700}
+.gloss dd{margin:0;color:var(--muted);font-size:14px}
+.editbar{display:none;background:var(--accent-soft);border-bottom:1px solid var(--accent)}
+.editing .editbar{display:block}
+.editbar .wrap{padding-block:8px;font-size:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+footer{padding-block:28px;color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion:no-preference){.g-bar,.bar-fill{transition:width .4s ease}}
+</style>
+
+<div id="app">
+<header class="band">
+  <div class="wrap">
+    <p class="eyebrow">American Welding Society × Perficient · Experience Optimization Program</p>
+    <h1>AWS.org Conversion Audit + Personalization</h1>
+    <p class="sub">A 13-week program to audit aws.org, prioritize improvements, and launch personalized experiences in Sitecore Personalize for the audiences AWS serves across the welding career journey.</p>
+    <dl class="plate">
+      <div><dt>Contract</dt><dd>SOW under MSA (May 12, 2023)</dd></div>
+      <div><dt>Signed</dt><dd>Aug 28, 2026</dd></div>
+      <div><dt>Program start</dt><dd>Sep 8, 2026</dd></div>
+      <div><dt>Planned finish</dt><dd id="plannedEnd">Week 13</dd></div>
+      <div><dt>Term ends</dt><dd>May 31, 2027</dd></div>
+      <div><dt>Budget (T&amp;M)</dt><dd>$50,475 · 255 h</dd></div>
+    </dl>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Sections">
+  <div class="wrap">
+    <div class="nav-links" id="navLinks">
+      <a href="#status">Status</a><a href="#timeline">Timeline</a><a href="#deliverables">Deliverables</a><a href="#next">Next steps</a><a href="#audiences">Audiences</a><a href="#journeys">Journeys</a><a href="#scope">Scope &amp; risks</a><a href="#glossary">Glossary</a>
+    </div>
+    <button class="btn" id="editBtn" aria-pressed="false">Edit</button>
+  </div>
+</nav>
+<div class="editbar"><div class="wrap"><b>Edit mode.</b> <span>Change deliverable statuses and tick off next steps. Changes save in this browser only.</span> <button class="btn ghost" id="resetBtn">Reset to defaults</button></div></div>
+
+<main>
+<!-- STATUS -->
+<section id="status"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Where we are</p><h2>Project status</h2></div>
+  <div class="now">
+    <div class="panel">
+      <div class="bigweek"><b id="wkNum">7</b><span><strong id="wkOf">of 13 planned weeks</strong><br><span class="muted" id="wkDates"></span></span></div>
+      <div class="seam" id="seam" aria-hidden="true"></div>
+      <div class="seam-lbl" aria-hidden="true"><span>Month 1 · Audit</span><span>Month 2 · Plan</span><span>Month 3 · Build &amp; launch</span></div>
+      <p id="phaseText"></p>
+      <div class="callout"><b>Where we stand.</b> AWS has finished its audience and journey groundwork (CRM job functions, 12 personas, homepage mockups, key journeys, competitive research). By the contract schedule, Perficient's Conversion Audit and Roadmap were due by week 4 and experience selection by week 6. The priority now is to confirm those deliverables and lock the approved experiences, starting with the homepage by job function.</div>
+    </div>
+    <div class="panel">
+      <h3>At a glance</h3>
+      <div class="kpis">
+        <div class="kpi"><b id="kAws">7/7</b><small>AWS inputs ready</small></div>
+        <div class="kpi"><b id="kDel">0/6</b><small>Perficient deliverables confirmed</small></div>
+        <div class="kpi"><b id="kPrf">—</b><small>Perficient items still open</small></div>
+        <div class="kpi"><b id="kLeft">—</b><small>Weeks left in plan</small></div>
+        <div class="kpi" style="grid-column:1/-1"><b id="kSteps" style="font-size:22px">0/12</b><small>Next steps done</small></div>
+      </div>
+      <div class="dl-meta"><span class="own aws">AWS</span> Cassie Burrell (contract contact) · <span class="own prf">Perficient</span> Kendra Fluegeman</div>
+      <p class="muted" style="font-size:14px">Personalization scope: up to <b>5 web templates</b> and/or <b>1 decision model</b>, with the homepage as one of the first use cases.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- TIMELINE -->
+<section id="timeline"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Contract schedule · SOW §5</p><h2>Timeline</h2><p class="muted">Planned weeks from the signed SOW, counted from Sep 8, 2026. Click a row to see what AWS needs to do in that activity. The SOW calls this schedule an estimate that may be adjusted.</p></div>
+  <div class="gantt-scroll"><div class="gantt" id="gantt"></div></div>
+  <div class="legend"><span><i style="background:var(--band)"></i>Planned window passed</span><span><i style="background:var(--accent)"></i>In progress this week</span><span><i style="background:var(--line)"></i>Upcoming</span></div>
+  <div class="term-strip">
+    <p class="muted" style="font-size:14px">The contract term runs past the 13-week plan, to May 31, 2027, because AWS's core systems upgrade is targeted for April 2027. Extending the term does not add scope or fees. New 2027 personalization work needs a separate SOW or Change Order.</p>
+    <div class="term" aria-label="Contract term">
+      <span style="flex:13;background:var(--band);color:var(--band-ink)">13-wk program · Sep 8 → Dec 7</span>
+      <span style="flex:16;background:var(--sunk);color:var(--muted)">Term extension (no added scope)</span>
+      <span style="flex:4;background:var(--accent-soft);color:var(--accent-ink)">Apr ’27 systems upgrade</span>
+      <span style="flex:4;background:var(--sunk);color:var(--muted)">May 31</span>
+    </div>
+  </div>
+</div></section>
+
+<!-- DELIVERABLES -->
+<section id="deliverables"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">SOW §10 · §8</p><h2>Deliverables</h2><p class="muted">The six contract deliverables from Perficient, plus what AWS owes the project. Perficient statuses start as “To confirm” because receipt isn't recorded in the materials. Use Edit to update them.</p></div>
+  <div class="dl" id="dlList"></div>
+  <div class="panel" style="margin-top:28px">
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline"><h3>Perficient: pending deliverables &amp; commitments</h3><span class="muted mono" style="font-size:12px" id="prfCount"></span></div>
+    <p class="muted" style="font-size:14px;max-width:72ch">Everything else the SOW commits Perficient to produce or do, beyond the six formal deliverables above. Each item shows its SOW section and planned week. Use Edit to mark items received.</p>
+    <div class="filters" id="prfFilter" role="group" aria-label="Filter Perficient items"></div>
+    <div class="tbl-scroll"><table><thead><tr><th>Item</th><th>SOW</th><th>Planned</th><th>Schedule</th><th>Status</th></tr></thead><tbody id="prfList"></tbody></table></div>
+  </div>
+  <div class="two" style="margin-top:28px">
+    <div class="panel"><h3>AWS inputs delivered</h3><ul class="list" id="awsDone"></ul></div>
+    <div class="panel"><h3>AWS responsibilities still open</h3><ul class="list" id="awsOpen"></ul></div>
+  </div>
+</div></section>
+
+<!-- NEXT STEPS -->
+<section id="next"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Recommended sequence</p><h2>Next steps</h2><p class="muted">Ordered by target week. Tick items off as they close.</p></div>
+  <div class="filters" id="ownFilter" role="group" aria-label="Filter by owner"></div>
+  <div class="panel" style="padding-block:4px"><div class="steps" id="steps"></div></div>
+</div></section>
+
+<!-- AUDIENCES -->
+<section id="audiences"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">CRM-aligned personas</p><h2>Who we personalize for</h2><p class="muted">The SOW asks for experiences aligned by job function, audience type and career stage. AWS mapped 12 personas to the 11 job-function values in the CRM. Industry is a separate CRM field.</p></div>
+  <div class="flow" aria-label="Personalization chain"><span>Job function</span><i>→</i><span>Career stage</span><i>→</i><span>User intent</span><i>→</i><span>Key journey</span><i>→</i><span>Personalized experience</span></div>
+  <div class="filters" id="jfFilter" role="group" aria-label="Filter by CRM job function"></div>
+  <div class="p-grid" id="personas"></div>
+
+  <div style="margin-top:32px;display:grid;gap:12px">
+    <h3>Anonymous visitors: proposed audience groups</h3>
+    <p class="muted" style="max-width:72ch">For visitors who aren't logged in, the plan is 5–6 simple groups in plain language, each mapped to exact CRM values. The grouping below is a draft for discussion with Perficient. Logged-in users get a “Not your role? Change it” fallback for empty or outdated CRM fields.</p>
+    <div class="groups" id="groups"></div>
+  </div>
+  <div style="margin-top:24px;display:grid;gap:8px">
+    <h3>Industry (separate CRM field)</h3>
+    <div class="ind" id="industries"></div>
+  </div>
+</div></section>
+
+<!-- JOURNEYS -->
+<section id="journeys"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">GA4 · 90 days to Sep 21, 2026</p><h2>Key journeys</h2><p class="muted">Top content entry points by sessions (technical pages like /login and /404 excluded). Engagement rate is on the right; lower rates point to pages worth a closer look in the audit.</p></div>
+  <div class="panel"><div class="bars" id="bars"></div>
+    <p class="muted" style="font-size:13px">This window ends on Sep 21, the day GA4 Advanced Consent Mode went live. Later session counts will read lower, so treat these figures as the pre-consent baseline.</p>
+  </div>
+  <h3 style="margin:28px 0 12px">Six journeys to explore</h3>
+  <div class="jy" id="jy"></div>
+  <h3 style="margin:28px 0 12px">Competitive research</h3>
+  <div class="tbl-scroll"><table><thead><tr><th>Organization</th><th>Industry</th><th>Segments by</th><th>Takeaway for AWS</th></tr></thead><tbody id="comp"></tbody></table></div>
+</div></section>
+
+<!-- SCOPE & RISKS -->
+<section id="scope"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">SOW §3, §6, §11–12</p><h2>Scope, budget &amp; risks</h2></div>
+  <div class="scope">
+    <div class="panel"><h3>In scope</h3><ul class="list" id="inScope"></ul></div>
+    <div class="panel"><h3>Out of scope</h3><p class="muted" style="font-size:14px">Perficient recommends an approach in workshops; delivery needs a separate SOW or Change Order.</p><ul class="list" id="outScope"></ul></div>
+  </div>
+  <div class="scope" style="margin-top:20px">
+    <div class="panel"><h3>Budget</h3>
+      <p class="muted" style="font-size:14px">Time and materials, invoiced monthly in arrears. Total authorized: <b class="mono">$50,475</b> for <b class="mono">255 h</b>. Up to 10% over (<b class="mono">$55,522.50</b>) needs no Change Request. Anything above needs AWS's written approval.</p>
+      <div class="budget-bars" id="budget"></div>
+    </div>
+    <div class="panel"><h3>Risks &amp; watch items</h3><div id="risks"></div></div>
+  </div>
+  <div class="panel" style="margin-top:20px"><h3>Contract housekeeping</h3><ul class="list" id="house"></ul></div>
+</div></section>
+
+<!-- GLOSSARY -->
+<section id="glossary"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Plain language</p><h2>Glossary</h2></div>
+  <dl class="gloss" id="gloss"></dl>
+</div></section>
+</main>
+<footer><div class="wrap">Sources: Perficient SOW “AWS Conversion Audit + Personalization” (signed Aug 28, 2026); AWS.org Personas — CRM Aligned; AWS project update on job functions, mockups, key journeys and competitive research. Week numbers and “today” update automatically.</div></footer>
+</div>
+
+<script>
+(function(){
+const START = new Date(2026,8,8); // Sep 8, 2026 = week 1
+const DAY = 864e5;
+const wkStart = n => new Date(START.getTime() + (n-1)*7*DAY);
+const wkEnd = n => new Date(START.getTime() + ((n-1)*7+6)*DAY);
+const fmt = d => d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+const today = new Date(); today.setHours(12,0,0,0);
+const dayIdx = Math.floor((today - START)/DAY);
+const curWk = Math.max(0, Math.floor(dayIdx/7)+1);
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- storage ---------- */
+const KEY='aws-pz-status-v1';
+let store={status:{},steps:{}};
+try{const r=localStorage.getItem(KEY); if(r) store=Object.assign(store,JSON.parse(r));}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}};
+let editing=false;
+
+/* ---------- data ---------- */
+const timeline=[
+ {n:'Kickoff & success metrics workshop',s:1,e:1,c:'Attend kickoff; confirm KPIs (membership sign-ups, certification enrollment, event registrations, engagement by persona).'},
+ {n:'Strategy & vision workshops',s:1,e:2,c:'Provide systems context: analytics, CRM/Dynamics, HubSpot, Sitecore roadmap. Covers audit scope, rule-based MVP, data-layer and integration paths.'},
+ {n:'Conversion Audit: research & analysis',s:1,e:3,c:'Give access to GA4, Hotjar and Sitecore Personalize; answer audit questions. Quantitative, heuristic and Hotjar behavioral analysis.'},
+ {n:'Roadmap & backlog delivered',s:4,e:4,c:'Review and give feedback on the roadmap and backlog, scored by impact, effort and persona fit.'},
+ {n:'Select & document approved experiences',s:5,e:6,c:'Take part in experience selection and prioritization. AWS product owners sign off.'},
+ {n:'Size dependencies, start development',s:6,e:8,c:'Provide content, design assets and use-case priorities. Perficient sizes templates, conditions, content blocks and the decision model.'},
+ {n:'Development in Sitecore Personalize',s:9,e:11,c:'Review and give timely feedback during experience QA.'},
+ {n:'Production deployment planning',s:11,e:12,c:'Coordinate deployment logistics and approvals. Launch includes 24–48 h live QA by Perficient.'},
+ {n:'Knowledge transfer & wrap-up',s:12,e:13,c:'Join knowledge-transfer sessions on managing launched experiences.'}
+];
+const deliverables=[
+ {no:1,n:'Conversion Audit Documentation',spec:'Key observations, findings and recommendations from quantitative, heuristic and Hotjar behavioral analysis, including Claude-assisted review of recordings validated by Perficient.',fmt:'Document',wk:[1,3],def:'To confirm'},
+ {no:2,n:'Prioritized Roadmap & Backlog',spec:'Audit ideas scored by impact, effort and persona alignment, with tracks for quick wins and personalized experiences.',fmt:'Document',wk:[4,4],def:'To confirm'},
+ {no:3,n:'Experience Documentation',spec:'For each approved experience: test goals, metrics and expected outcomes.',fmt:'Document',wk:[5,6],def:'To confirm'},
+ {no:6,n:'Homepage Personalization Experience',spec:'Personalized aws.org homepage by persona, membership status, returning-visitor behavior and campaign source. One of the first use cases.',fmt:'Sitecore Personalize',wk:[6,12],def:'In progress'},
+ {no:4,n:'Personalized Experiences',spec:'Up to 5 small experiences (or 1 large) in Sitecore Personalize, on the homepage or elsewhere on the public site.',fmt:'Sitecore Personalize',wk:[6,12],def:'Not started'},
+ {no:5,n:'Decision Model',spec:'Planning and development support for up to 1 decision model in Sitecore Personalize.',fmt:'Sitecore Personalize',wk:[6,11],def:'Not started'}
+];
+const prfItems=[
+ {id:'p1',t:'KPIs and success metrics per experience',d:'KPIs tied to membership sign-ups, certification enrollment, event registrations and engagement by persona, with measurable targets for each planned experience.',ref:'Phase 0',wk:[1,1]},
+ {id:'p2',t:'Workshop recommendations & phased roadmap',d:'Personalization vision with a rule-based MVP (new vs. returning, section visited, prior engagement) and a phased approach.',ref:'Phase 0',wk:[1,2]},
+ {id:'p3',t:'GA4 data-quality plan & data-layer approach',d:'Plan to improve GA4 user data, plus a future data layer with attributes by persona and job role. Recommendation only; the build is out of scope.',ref:'Phase 0',wk:[1,2]},
+ {id:'p4',t:'Integration & identity recommendations',d:'Options across Dynamics / Customer Insights, Sitecore CDP, the Sitecore AI roadmap and HubSpot, and cross-device identity resolution, with a proposed SOW or Change Order.',ref:'Phase 0 · §6',wk:[1,2]},
+ {id:'p5',t:'Quick wins list',d:'Immediate site improvements identified in the audit, separate from personalization experiments.',ref:'Month 1',wk:[3,4]},
+ {id:'p6',t:'Hotjar behavioral findings',d:'Heatmaps, scroll maps and session-recording patterns (Claude-assisted at scale, validated by Perficient) per persona and key page.',ref:'Month 1 · #5–6',wk:[1,3]},
+ {id:'p7',t:'Homepage personalization recommendation',d:'Recommended approach by persona, membership status, returning-visitor behavior and campaign source, using analytics, survey data, the audit and Hotjar.',ref:'Months 2–3',wk:[5,6]},
+ {id:'p8',t:'Dependency effort estimates',d:'Effort for web templates, custom conditions, content blocks and the decision model per approved experience, checked against remaining hours.',ref:'Months 2–3',wk:[6,8]},
+ {id:'p9',t:'UX recommendations & low-fidelity wireframes',d:'Design recommendations and wireframes or mockups for approved experiences, as needed.',ref:'Months 2–3',wk:[6,9]},
+ {id:'p10',t:'Built dependencies in Sitecore Personalize',d:'Web templates, custom conditions and content blocks for every approved experience.',ref:'Months 2–3',wk:[8,11]},
+ {id:'p11',t:'QA test cases',d:'Perficient\'s QA test cases, provided to AWS on request to support the UAT plan.',ref:'§8',wk:[10,11]},
+ {id:'p12',t:'Deployment plan support',d:'Support for planning deployment of experiences to AWS\'s production environment.',ref:'Month 3',wk:[11,12]},
+ {id:'p13',t:'Launch & 24–48 h live QA',d:'EO Lead, Strategist and Developer monitor each launch for the first 24–48 hours.',ref:'Months 2–3',wk:[11,13]},
+ {id:'p14',t:'Results analysis',d:'Quantitative and Hotjar analysis of each launched experience, with heatmaps and tagged key actions.',ref:'Months 2–3',wk:[12,13]},
+ {id:'p15',t:'Knowledge transfer',d:'Training AWS on managing launched experiences in Sitecore Personalize.',ref:'Month 3',wk:[12,13]},
+ {id:'p16',t:'Weekly status calls & office hours',d:'Led by the CRO Program Lead: insights from audits and tests, timeline and financials.',ref:'§15',wk:[1,13],ongoing:true},
+ {id:'p17',t:'Monthly invoices with hours',d:'Invoiced monthly in arrears on T&M. Request hours by role to track against the 255 h estimate.',ref:'§11',wk:[1,13],ongoing:true},
+ {id:'p18',t:'Notice of assumption changes',d:'Email AWS as soon as Perficient sees changes to assumptions, with the impact on scope, timeline or fees.',ref:'§6',wk:[1,13],ongoing:true}
+];
+const PSTAT={'Pending':'s-mute','To confirm':'s-info','In progress':'s-warn','Received':'s-ok','At risk':'s-crit','Ongoing':'s-info'};
+const STATUSES={'To confirm':'s-info','Not started':'s-mute','In progress':'s-warn','Delivered':'s-ok','Approved':'s-ok','At risk':'s-crit'};
+const awsDone=[
+ ['CRM job functions & industries','11 job-function values and 12 industry values, aligned to the CRM.'],
+ ['12 CRM-aligned personas','Audience type, career stage, goal, intent, offerings, signals, opportunity and CTA for each.'],
+ ['Homepage mockups by job function','Two interactive mockups with a profile switcher, plus Mockup 1, Mockup 2 and a wireframe.'],
+ ['Key journeys analysis','Top 10 content entry points (90 days to Sep 21) and six candidate journeys.'],
+ ['GA4 path explorations','Two path reports showing how users move between pages.'],
+ ['Personalization Audit: key paths','Reference to the key user paths identified.'],
+ ['Competitive research','edX, Boston Scientific EDUCARE, NADCA and Coursera.']
+];
+const awsOpen=[
+ ['q','Platform access confirmed','Hotjar, GA4, Sitecore Personalize and HubSpot for Perficient (§8). Onboarding should take no more than 7 business days.'],
+ ['q','User survey data shared','The SOW assumes AWS shares survey data in Month 1 to inform the homepage design (§6).'],
+ ['open','Content & design assets','For each approved experience: copy, images and CTAs per persona.'],
+ ['open','Sign-off on experience selection','AWS product owners approve which experiences get built and launched.'],
+ ['open','UAT single point of contact','One person to triage and consolidate defects before they go to Perficient.'],
+ ['open','UAT plan','AWS writes it: team, test cases, timeline; covers content, visuals, analytics, SEO and function.'],
+ ['open','Production deployment approvals','Coordinate logistics and approvals in weeks 11–12.']
+];
+const steps=[
+ {id:'s1',t:'Confirm the Conversion Audit and Roadmap',d:'Both were due by week 4. Ask Perficient for the documents, or a revised date, and log receipt.',o:'joint',w:'Wk 7–8'},
+ {id:'s2',t:'Confirm platform access and survey data',d:'Make sure Perficient has Hotjar, GA4, Sitecore Personalize and HubSpot, and has the user survey data.',o:'aws',w:'Wk 8'},
+ {id:'s3',t:'Agree the anonymous audience groups',d:'Settle the 5–6 plain-language groups, their CRM mapping, and the “Not your role? Change it” fallback.',o:'joint',w:'Wk 8'},
+ {id:'s4',t:'Lock the approved experiences',d:'Homepage by job function first. Pick the rest from the roadmap within 5 templates / 1 decision model. AWS product owners sign off.',o:'joint',w:'Wk 8'},
+ {id:'s5',t:'Reset KPI baselines after Consent Mode',d:'GA4 sessions dropped after Sep 21. Agree comparison periods and targets for each experience before launch.',o:'joint',w:'Wk 8'},
+ {id:'s6',t:'Deliver Experience Documentation',d:'Test goals, metrics and expected outcomes for each approved experience, starting with the homepage.',o:'prf',w:'Wk 8–9'},
+ {id:'s7',t:'Size dependencies against remaining hours',d:'Estimate templates, custom conditions, content blocks and the decision model. Compare with hours used so far.',o:'prf',w:'Wk 8–9'},
+ {id:'s8',t:'Hand over content and design assets',d:'Copy, imagery and CTAs per persona, based on the mockups and suggested CTAs.',o:'aws',w:'Wk 9'},
+ {id:'s9',t:'Name UAT lead and write the UAT plan',d:'One defect triage contact; test cases for content, analytics tags and functionality.',o:'aws',w:'Wk 9–10'},
+ {id:'s10',t:'Build and QA in Sitecore Personalize',d:'Perficient builds; AWS reviews quickly during QA.',o:'prf',w:'Wk 9–11'},
+ {id:'s11',t:'Plan the production launch',d:'Week 12 includes Thanksgiving (Nov 26). Agree a launch date with staff available for 24–48 h live QA.',o:'joint',w:'Wk 11–12'},
+ {id:'s12',t:'Knowledge transfer and next-phase plan',d:'Learn to manage launched experiences. Scope data-layer, CRM/HubSpot integration and 2027 work as a Change Order or new SOW before the April 2027 upgrade.',o:'joint',w:'Wk 12–13'}
+];
+const OWN={aws:'AWS',prf:'Perficient',joint:'Joint'};
+const personas=[
+ {n:'Student',crm:['Student'],type:'Students / New Entrants',stage:'Student / New Entrant',goal:'Understand how to start a welding career',needs:'Career paths, training, entry-level credentials (Certified Welder), salary and career info, competitions',off:'Career Resources; Education; SENSE; Scholarships; Student Membership; Student Chapters; Job Board',sig:'Career-path visits; beginner searches; scholarship/training content; little or no certification history',opp:'Replace technical messaging with career-entry guidance and educational pathways',cta:'Explore Welding Careers',j:'Career & Students'},
+ {n:'Welder',crm:['Welder'],type:'Individual / Certification Candidate',stage:'Early-Career',goal:'Earn more; work safely; produce quality work; build skills and credentials',needs:'Job opportunities, training, certifications, career progression, membership benefits',off:'Certified Welder; Education; SENSE; Scholarships; Early Career or Individual Membership; Publications; Job Board',sig:'Welder/certification content; training searches; eligibility pages; logged-in certification data',opp:'Promote the next credential and relevant training',cta:'Advance Your Welding Career',j:'Technical Online Education'},
+ {n:'Experienced Welder',crm:['Welder'],type:'Individual Member',stage:'Mid / Advanced',goal:'Move into specialized or higher-paying roles, or business ownership',needs:'Advanced credentials, inspection path, leadership opportunities, technical resources',off:'CW; CWI pathway; CWI prep education; Membership; Publications; Codes & Standards; Job Board',sig:'Repeat certification visits; advanced training; CWI content; technical publications',opp:'Show the path from welder to inspector or supervisor',cta:'Explore Your Next Certification',j:'CWI Certification'},
+ {n:'Welding Inspector / QA-QC',crm:['Inspector, Quality Control'],type:'Member / Certification Candidate',stage:'Mid-Late Career',goal:'Maintain credentials, grow professionally, prepare the next generation',needs:'More certifications, CWI renewal, endorsements, CEUs/PDHs, code updates, networking, safety',off:'CWI; Endorsements; Recertification; SCWI; Education; Standards; Inspection Trends; Individual Membership',sig:'CWI pages; certification status; renewal/expiration date; code searches; Inspection Trends; Welding Journal',opp:'Surface renewal at the right time and recommend continuing education',cta:'Manage Your CWI Certification',j:'CWI Certification'},
+ {n:'Senior Inspector / Inspection Leader',crm:['Inspector, Quality Control'],type:'Individual Member',stage:'Advanced / Leadership',goal:'Maintain expertise and lead quality programs',needs:'Advanced credentials, standards, technical updates, leadership resources',off:'SCWI; Endorsements; Standards; Conferences; Publications',sig:'Advanced certification content; standards purchases; events; repeat technical searches',opp:'Promote advanced certification, standards updates and leadership content',cta:'Explore Advanced Credentials',j:'Standards & Publications'},
+ {n:'Welding Engineer',crm:['Engineer'],type:'Individual Member / Technical Professional',stage:'Mid / Advanced',goal:'Solve engineering problems; grow technical expertise',needs:'Standards, welding research, engineering credentials, recertification, professional development',off:'CWEng; Standards; Welding Journal Research Supplement; Education; Conferences; Membership',sig:'WJRS searches; standards views; engineering content; CWEng pages',opp:'Prioritize research, relevant standards and engineering certification',cta:'Access Engineering Resources',j:'Standards & Publications'},
+ {n:'Educator / Instructor',crm:['Educator'],type:'Educator / Academic Institution',stage:'Mid / Advanced',goal:'Train and prepare the next generation of welders',needs:'Curriculum, instructor credentials, teaching resources, institutional programs',off:'SENSE; CWE; Education; Scholarships; Curriculum resources; Workforce development',sig:'Education/curriculum pages; educator forms; SENSE/CWE interest; institutional domain',opp:'Show educator resources instead of general certification messaging',cta:'Explore Educator Resources',j:'Career & Students'},
+ {n:'Supervisor / Welding Manager',crm:['Manager, Supervisor'],type:'Individual / Employer',stage:'Mid / Leadership',goal:'Improve team performance, compliance and capability',needs:'Training, certification verification, standards, workforce development',off:'Corporate Membership; Education; Certifications; Standards; Conferences',sig:'Team-training pages; group inquiries; corporate content; standards searches',opp:'Shift from individual products to team solutions',cta:"Build Your Team's Capabilities",j:'Membership'},
+ {n:'Safety Professional',crm:['Technician','Manager, Supervisor'],type:'Individual / Employer',stage:'Mid / Advanced',goal:'Improve welding safety and regulatory compliance',needs:'Safety standards, training, guidance, technical resources',off:'Safety resources; Standards; Education; Publications',sig:'Safety searches; safety content; standards views/downloads',opp:'Safety-focused recommendations and standards bundles',cta:'Explore Welding Safety Resources',j:'Standards & Publications'},
+ {n:'NDE / NDT Professional',crm:['Technician','Inspector, Quality Control'],type:'Individual / Certification Candidate',stage:'Mid / Advanced',goal:'Expand inspection and testing capabilities',needs:'Inspection knowledge, endorsements, standards, specialized education',off:'Certifications/Endorsements; Education; Standards; Publications',sig:'NDT/NDE searches; inspection content; certification pages; standards',opp:'Recommend complementary inspection credentials',cta:'Expand Your Inspection Expertise',j:'CWI Certification'},
+ {n:'Corporate Buyer / Employer',crm:['Executive, Owner','Manager, Supervisor','Sales'],type:'Corporate Member / Employer',stage:'Organizational',goal:'Build workforce capability and reduce organizational risk',needs:'Employee training, certifications, standards access, recruiting, membership value',off:'Corporate Membership; Group Training; Certifications; Standards; Workforce solutions',sig:'Corporate membership pages; group inquiries; high-volume standards/training; company domain',opp:'Lead with organizational ROI and group solutions',cta:'Explore Solutions for Your Organization',j:'Membership'},
+ {n:'Industry Partner / Center of Influence',crm:['Consultant','Executive, Owner'],type:'Center of Influence / Industry Partner',stage:'Leadership',goal:'Engage with AWS and shape the welding ecosystem',needs:'Partnerships, research, events, standards development, sponsorship/advertising',off:'Conferences; Committees; Standards; Foundation; Media/Advertising',sig:'Event/committee content; sponsorship/media pages; repeat organizational visits',opp:'Promote participation, partnerships and thought leadership',cta:'Partner With AWS',j:'Events'}
+];
+const JF=['Student','Welder','Inspector, Quality Control','Technician','Engineer','Researcher','Educator','Manager, Supervisor','Executive, Owner','Sales','Consultant'];
+const groups=[
+ {n:'Students & new to welding',c:['Student']},
+ {n:'Welders',c:['Welder']},
+ {n:'Inspectors, QA/QC & NDT',c:['Inspector, Quality Control','Technician']},
+ {n:'Engineers & researchers',c:['Engineer','Researcher']},
+ {n:'Educators & instructors',c:['Educator']},
+ {n:'Employers, managers & partners',c:['Executive, Owner','Manager, Supervisor','Sales','Consultant']}
+];
+const industries=['Aerospace','Automotive','Education & Training','Machinery & Equipment','Maintenance & Repair','Metal Fabrication','Oil & Gas','Power Generation','Railroad','Shipbuilding','Structural','Supplier & Distribution'];
+const pages=[['Homepage',116978,81],['Certified Welding Inspector (CWI)',39553,59],['2-Week Online CWI Seminar',25004,57],['Professional Certification Hub',16459,81],['Welding Summit',15107,39],['D1.1 Structural Welding Code',12441,87],['CWI Pre-Seminar',11257,86],['Certified Welder Program',8603,81],['Welder Training Scholarship',8320,87],['Welding Curriculum',6954,53]];
+const journeys=[
+ ['CWI Certification','Likely the highest-value certification journey.','CWI page → seminar → pre-seminar'],
+ ['Membership','Joining and renewal.','Join / renew flow'],
+ ['Technical Online Education','Self-paced courses and live webinars, from course page to checkout and learning.','aws.org → awslearning.org'],
+ ['Standards & Publications','High-quality traffic; D1.1 is the main gateway.','aws.org → pubs.aws.org store'],
+ ['Career & Students','Career paths, scholarships and student membership.','Careers · Scholarships · Student'],
+ ['Events','For example, Welding Summit to registration.','Summit → events.aws.org (Cvent)']
+];
+const comp=[
+ ['edX: Find Your Learning Path','Education / Professional learning','Career stage + interests + goals','Use career goals and stage to recommend learning paths.'],
+ ['Boston Scientific EDUCARE','Professional education / Healthcare','Specialty + career stage','Connect role and career stage to relevant education and resources.'],
+ ['NADCA: Job Function Kits','Manufacturing / Die casting','Job function','Organize education around functions such as Quality, Maintenance, Safety and Management.'],
+ ['Coursera Career Academy','Online learning / Professional development','Job role + career stage + goals + skills','Start from job function and connect it to career progression and learning.']
+];
+const inScope=['Kickoff and success-metrics workshop; KPIs per experience','Strategy & vision workshops, including data-layer and integration recommendations','Conversion Audit: quantitative, heuristic and Hotjar behavioral analysis','Prioritized roadmap and backlog','Up to 5 web templates and/or 1 decision model in Sitecore Personalize','Homepage personalization as an early use case','UX recommendations and low-fidelity wireframes as needed','Launch with 24–48 h live QA, results analysis, office hours, knowledge transfer'];
+const outScope=['Custom API or CRM integrations (Microsoft Dynamics, Customer Insights, HubSpot)','Data-layer engineering','Identity-resolution builds','Sitecore CDP configuration','Experiences beyond the 5 templates / 1 decision model','Security and penetration testing (AWS responsibility)','Travel (pre-approved, billed separately)'];
+const roles=[['Conversion Rate Optimization Lead',88,200],['Sitecore Strategist',88,200],['Sitecore Developer',64,200],['Program Manager',15,165]];
+const risks=[
+ ['h','Schedule slip on early deliverables','Audit and roadmap were planned for weeks 3–4. Any slip compresses build time before the holidays.'],
+ ['h','GA4 baseline shift','Advanced Consent Mode (live ~Sep 21) lowered reported sessions. Pre/post comparisons and KPI targets need a new baseline.'],
+ ['m','Data quality and data layer','The SOW assumes data is fit for purpose. GA4 lacks a full data layer and the CRM is still in development; empty job-function fields reduce logged-in personalization.'],
+ ['m','Holiday window','Week 12 includes Thanksgiving. Launch QA needs people available for 24–48 h.'],
+ ['m','Hours burn','255 h is a T&M estimate with no delivery-date guarantee. Track monthly invoices against progress.'],
+ ['l','April 2027 systems upgrade','Launched experiences may need rework after the upgrade. Plan the next phase with that date in mind.']
+];
+const house=[
+ ['Invoice email reads “cburrell@aws.com”','The contact elsewhere is cburrell@aws.org. Ask Perficient to correct it so invoices arrive.'],
+ ['Fee table labels $50,475 as “Monthly”','The SOW text authorizes $50,475 for 255 h in total. Treat it as the total and confirm in writing.'],
+ ['Section cross-reference','§9 refers to a Change Request process in “Section 14”; it is §12.'],
+ ['Confidential data section','§7–8 checkboxes are only partly completed. Confirm what personal data Perficient will access and where.']
+];
+const gloss=[
+ ['Sitecore Personalize','The tool that shows different content to different visitors on aws.org.'],
+ ['Experience','One personalized change, such as a homepage hero that changes by job function.'],
+ ['Web template','A reusable layout in Sitecore Personalize that experiences use. The SOW covers up to 5.'],
+ ['Decision model','Rules or scoring logic that chooses the best content for a visitor. The SOW covers 1.'],
+ ['Custom condition','A rule that decides who sees an experience, such as “job function = Educator”.'],
+ ['Conversion Audit','Perficient\'s review of aws.org data, usability and recordings to find what blocks people.'],
+ ['Heuristic analysis','Expert review against relevance, clarity, value, friction and distraction.'],
+ ['Hotjar','Heatmaps, scroll maps and session recordings of real visits.'],
+ ['EO Program','Experience Optimization: Perficient\'s audit-to-launch program.'],
+ ['T&M','Time and materials. AWS pays for hours used, up to the authorized amount.'],
+ ['Change Request / Order','A signed change to scope, time or fees. Not needed for up to 10% over budget.'],
+ ['UAT','User acceptance testing. AWS checks the work before it goes live.'],
+ ['Consent Mode','GA4 setting that waits for cookie consent before tracking, so reported sessions drop.']
+];
+
+/* ---------- status ---------- */
+const w = Math.min(Math.max(curWk,1),13);
+$('#plannedEnd').textContent = fmt(wkEnd(13))+', 2026';
+if(curWk<1){$('#wkNum').textContent='—';$('#wkOf').textContent='Program not started';}
+else if(curWk>13){$('#wkNum').textContent='13';$('#wkOf').textContent='13-week plan complete';}
+else{$('#wkNum').textContent=curWk;}
+$('#wkDates').textContent = curWk>=1&&curWk<=13 ? 'Week of '+fmt(wkStart(curWk))+' – '+fmt(wkEnd(curWk)) : '';
+$('#kLeft').textContent = Math.max(0,13-Math.max(curWk,0));
+const phase = curWk<=4?'Month 1: Conversion Audit, research and analysis':curWk<=8?'Month 2: Experience selection and planning':'Month 3: Development, launch and knowledge transfer';
+const live = timeline.filter(r=>curWk>=r.s&&curWk<=r.e).map(r=>r.n.toLowerCase());
+$('#phaseText').innerHTML = curWk>13?'The 13-week plan has ended; the contract term continues to May 31, 2027.':'<b>'+phase+'.</b> Planned this week: '+(live.length?esc(live.join('; ')):'—')+'.';
+$('#seam').innerHTML = Array.from({length:13},(_,i)=>`<span class="${i+1<curWk?'done':i+1===curWk?'cur':''}" title="Week ${i+1}: ${fmt(wkStart(i+1))}"></span>`).join('');
+
+/* ---------- gantt ---------- */
+function renderGantt(){
+  let h=`<div class="g-row head"><div class="g-name">Activity</div><div class="g-track">${Array.from({length:13},(_,i)=>`<div class="wk">W${i+1}<br>${fmt(wkStart(i+1))}</div>`).join('')}</div></div>`;
+  timeline.forEach((r,i)=>{
+    const st = curWk>r.e?'past':curWk>=r.s?'live':'next';
+    h+=`<div class="g-row" data-i="${i}" tabindex="0" role="button" aria-expanded="false"><div class="g-name">${esc(r.n)}<small>Weeks ${r.s}${r.e>r.s?'–'+r.e:''} · ${fmt(wkStart(r.s))} – ${fmt(wkEnd(r.e))}</small></div><div class="g-track"><div class="g-bar ${st}" style="grid-column:${r.s}/${r.e+1}"></div></div><div class="g-detail" hidden><b>AWS role:</b> ${esc(r.c)}</div></div>`;
+  });
+  const frac = Math.min(Math.max(dayIdx/91,0),1);
+  h+=`<div class="g-today" style="left:calc(260px + (100% - 260px) * ${frac})"></div>`;
+  $('#gantt').innerHTML=h;
+  $('#gantt').querySelectorAll('.g-row[data-i]').forEach(row=>{
+    const tog=()=>{const d=row.querySelector('.g-detail');d.hidden=!d.hidden;row.setAttribute('aria-expanded',String(!d.hidden));};
+    row.addEventListener('click',tog);row.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tog();}});
+  });
+}
+
+/* ---------- deliverables ---------- */
+function renderDeliverables(){
+  $('#dlList').innerHTML = deliverables.map(d=>{
+    const s = store.status['d'+d.no]||d.def;
+    const plan = curWk>d.wk[1]?['Planned window passed','s-crit']:curWk>=d.wk[0]?['In planned window','s-warn']:['Upcoming','s-mute'];
+    const sel = `<select id="st-d${d.no}" data-d="${d.no}" aria-label="Status for deliverable ${d.no}">${Object.keys(STATUSES).map(k=>`<option${k===s?' selected':''}>${k}</option>`).join('')}</select>`;
+    return `<div class="dl-item"><div class="dl-no">${d.no}</div><div class="dl-body"><b>${esc(d.n)}</b><span class="muted" style="font-size:14px">${esc(d.spec)}</span><div class="dl-meta"><span class="tag">${d.fmt}</span><span>Planned: week ${d.wk[0]}${d.wk[1]>d.wk[0]?'–'+d.wk[1]:''} (${fmt(wkEnd(d.wk[1]))})</span></div></div><div class="dl-side">${editing?sel:`<span class="pill ${STATUSES[s]}">${s}</span>`}<span class="pill ${plan[1]}" style="font-weight:500">${plan[0]}</span></div></div>`;
+  }).join('');
+  $('#dlList').querySelectorAll('select').forEach(el=>el.addEventListener('change',e=>{store.status['d'+e.target.dataset.d]=e.target.value;save();updateKpis();}));
+  renderPrf();
+  updateKpis();
+}
+let prfF='all';
+const pDef=p=>p.ongoing?'Ongoing':curWk>p.wk[1]?'To confirm':curWk>=p.wk[0]?'In progress':'Pending';
+const pStat=p=>store.status[p.id]||pDef(p);
+const pOpen=p=>!['Received','Ongoing'].includes(pStat(p));
+$('#prfFilter').innerHTML=[['all','All'],['overdue','Past planned date'],['now','Due now'],['next','Upcoming'],['ongoing','Ongoing']].map(([k,l])=>`<button class="chip" data-f="${k}" aria-pressed="${k==='all'}">${l}</button>`).join('');
+$('#prfFilter').addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(!b)return;prfF=b.dataset.f;$('#prfFilter').querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',String(c===b)));renderPrf();});
+function pBucket(p){return p.ongoing?'ongoing':curWk>p.wk[1]?'overdue':curWk>=p.wk[0]?'now':'next';}
+function renderPrf(){
+  const rows=prfItems.filter(p=>prfF==='all'||pBucket(p)===prfF);
+  const lab={overdue:['Past planned date','s-crit'],now:['Due now','s-warn'],next:['Upcoming','s-mute'],ongoing:['Ongoing','s-info']};
+  $('#prfList').innerHTML = rows.length?rows.map(p=>{
+    const s=pStat(p), b=lab[pBucket(p)];
+    const ctl=editing?`<select id="st-${p.id}" data-p="${p.id}" aria-label="Status: ${esc(p.t)}" style="border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:4px;padding:3px 5px;font-size:13px">${Object.keys(PSTAT).map(k=>`<option${k===s?' selected':''}>${k}</option>`).join('')}</select>`:`<span class="pill ${PSTAT[s]}">${s}</span>`;
+    return `<tr><td><b>${esc(p.t)}</b><br><span class="muted" style="font-size:13px">${esc(p.d)}</span></td><td class="mono" style="font-size:12px;white-space:nowrap">${esc(p.ref)}</td><td class="mono" style="font-size:12px;white-space:nowrap">${p.ongoing?'Wk 1–13':'Wk '+p.wk[0]+(p.wk[1]>p.wk[0]?'–'+p.wk[1]:'')+'<br><span class="muted">by '+fmt(wkEnd(p.wk[1]))+'</span>'}</td><td><span class="pill ${b[1]}" style="font-weight:500">${b[0]}</span></td><td>${ctl}</td></tr>`;
+  }).join(''):`<tr><td colspan="5" class="muted">No items in this view.</td></tr>`;
+  $('#prfList').querySelectorAll('select').forEach(el=>el.addEventListener('change',e=>{store.status[e.target.dataset.p]=e.target.value;save();updateKpis();}));
+  $('#prfCount').textContent=prfItems.filter(pOpen).length+' open · '+prfItems.filter(p=>pBucket(p)==='overdue'&&pOpen(p)).length+' past planned date';
+}
+$('#awsDone').innerHTML = awsDone.map(([t,d])=>`<li><span class="tick ok">✓</span><span><b>${esc(t)}</b><br><span class="muted" style="font-size:14px">${esc(d)}</span></span></li>`).join('');
+$('#awsOpen').innerHTML = awsOpen.map(([k,t,d])=>`<li><span class="tick ${k}">${k==='q'?'?':'!'}</span><span><b>${esc(t)}</b>${k==='q'?' <span class="pill s-info">Confirm</span>':''}<br><span class="muted" style="font-size:14px">${esc(d)}</span></span></li>`).join('');
+
+/* ---------- steps ---------- */
+let ownF='all';
+$('#ownFilter').innerHTML=[['all','All'],['aws','AWS'],['prf','Perficient'],['joint','Joint']].map(([k,l])=>`<button class="chip" data-o="${k}" aria-pressed="${k==='all'}">${l}</button>`).join('');
+$('#ownFilter').addEventListener('click',e=>{const b=e.target.closest('[data-o]');if(!b)return;ownF=b.dataset.o;$('#ownFilter').querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',String(c===b)));renderSteps();});
+function renderSteps(){
+  $('#steps').innerHTML = steps.filter(s=>ownF==='all'||s.o===ownF).map(s=>{
+    const done=!!store.steps[s.id];
+    return `<div class="step${done?' done':''}"><input type="checkbox" id="cb-${s.id}" data-s="${s.id}"${done?' checked':''} aria-label="Mark done: ${esc(s.t)}"><label for="cb-${s.id}" style="display:grid;gap:2px;cursor:pointer"><span class="st-title">${esc(s.t)}</span><span class="st-desc">${esc(s.d)}</span></label><div class="st-side"><span class="own ${s.o}">${OWN[s.o]}</span><span class="mono muted" style="font-size:12px">${s.w}</span></div></div>`;
+  }).join('');
+  $('#steps').querySelectorAll('input').forEach(cb=>cb.addEventListener('change',e=>{store.steps[e.target.dataset.s]=e.target.checked;save();renderSteps();updateKpis();}));
+}
+
+/* ---------- personas ---------- */
+let jf='All';
+$('#jfFilter').innerHTML=['All',...JF].map(k=>`<button class="chip" data-j="${esc(k)}" aria-pressed="${k==='All'}">${esc(k)}</button>`).join('');
+$('#jfFilter').addEventListener('click',e=>{const b=e.target.closest('[data-j]');if(!b)return;jf=b.dataset.j;$('#jfFilter').querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',String(c===b)));renderPersonas();});
+function renderPersonas(){
+  const list=personas.filter(p=>jf==='All'||p.crm.includes(jf));
+  $('#personas').innerHTML = list.length? list.map(p=>`<article class="p-card"><header><h3>${esc(p.n)}</h3><span class="tag">${esc(p.stage)}</span></header><div style="display:flex;gap:4px;flex-wrap:wrap">${p.crm.map(c=>`<span class="tag" style="background:var(--info-soft);color:var(--info)">CRM: ${esc(c)}</span>`).join('')}</div><dl><dt>Primary goal</dt><dd>${esc(p.goal)}</dd><dt>Needs</dt><dd>${esc(p.needs)}</dd><dt>Relevant offerings</dt><dd>${esc(p.off)}</dd><dt>Signals</dt><dd class="muted">${esc(p.sig)}</dd><dt>Personalization</dt><dd>${esc(p.opp)}</dd><dt>Likely key journey</dt><dd>${esc(p.j)}</dd></dl><span class="cta">${esc(p.cta)} →</span></article>`).join('')
+  : `<div class="panel"><b>No dedicated persona for “${esc(jf)}” yet.</b><span class="muted">This CRM value appears in the anonymous groups below. Consider whether it needs its own persona or a default experience.</span></div>`;
+}
+$('#groups').innerHTML = groups.map((g,i)=>`<div class="group"><span class="eyebrow">Group ${i+1}</span><b>${esc(g.n)}</b><div class="tags">${g.c.map(c=>`<span class="tag">${esc(c)}</span>`).join('')}</div></div>`).join('');
+$('#industries').innerHTML = industries.map(i=>`<span class="tag">${esc(i)}</span>`).join('');
+
+/* ---------- journeys ---------- */
+const max=pages[0][1];
+$('#bars').innerHTML = pages.map(([n,s,e])=>`<div class="bar-row"><span class="lbl" title="${esc(n)}">${esc(n)}</span><div class="bar-track"><div class="bar-fill" style="width:${(s/max*100).toFixed(1)}%">${s.toLocaleString('en-US')}</div></div><span class="eng ${e<55?'low':e<70?'mid':'hi'}">${e}% eng.</span></div>`).join('');
+$('#jy').innerHTML = journeys.map(([t,d,p])=>`<div><b>${esc(t)}</b><span class="muted" style="font-size:14px">${esc(d)}</span><small>${esc(p)}</small></div>`).join('');
+$('#comp').innerHTML = comp.map(r=>`<tr>${r.map((c,i)=>`<td>${i===0?'<b>'+esc(c)+'</b>':esc(c)}</td>`).join('')}</tr>`).join('');
+
+/* ---------- scope ---------- */
+$('#inScope').innerHTML = inScope.map(t=>`<li><span class="tick ok">✓</span><span>${esc(t)}</span></li>`).join('');
+$('#outScope').innerHTML = outScope.map(t=>`<li><span class="tick open">✕</span><span>${esc(t)}</span></li>`).join('');
+$('#budget').innerHTML = roles.map(([r,h,rate])=>`<div class="bb"><span>${esc(r)}</span><div class="bar-track"><div class="bar-fill" style="width:${(h/88*100).toFixed(0)}%"></div></div><span class="mono" style="text-align:right;font-size:13px">${h} h · $${(h*rate).toLocaleString('en-US')}</span></div>`).join('');
+$('#risks').innerHTML = risks.map(([s,t,d])=>`<div class="risk"><span class="sev ${s}" title="${s==='h'?'High':s==='m'?'Medium':'Low'}"></span><div><b>${esc(t)}</b> <span class="pill ${s==='h'?'s-crit':s==='m'?'s-warn':'s-info'}">${s==='h'?'High':s==='m'?'Medium':'Low'}</span><br><span class="muted" style="font-size:14px">${esc(d)}</span></div></div>`).join('');
+$('#house').innerHTML = house.map(([t,d])=>`<li><span class="tick q">i</span><span><b>${esc(t)}</b><br><span class="muted" style="font-size:14px">${esc(d)}</span></span></li>`).join('');
+$('#gloss').innerHTML = gloss.map(([t,d])=>`<div><dt>${esc(t)}</dt><dd>${esc(d)}</dd></div>`).join('');
+
+/* ---------- kpis / edit ---------- */
+function updateKpis(){
+  const conf=deliverables.filter(d=>['Delivered','Approved'].includes(store.status['d'+d.no]||d.def)).length;
+  $('#kDel').textContent=conf+'/'+deliverables.length;
+  const po=$('#kPrf'); if(po) po.textContent=prfItems.filter(pOpen).length+deliverables.length-conf;
+  $('#kAws').textContent=awsDone.length+'/'+awsDone.length;
+  $('#kSteps').textContent=steps.filter(s=>store.steps[s.id]).length+'/'+steps.length;
+}
+$('#editBtn').addEventListener('click',()=>{editing=!editing;document.getElementById('app').classList.toggle('editing',editing);$('#editBtn').textContent=editing?'Done':'Edit';$('#editBtn').classList.toggle('primary',editing);$('#editBtn').setAttribute('aria-pressed',String(editing));renderDeliverables();});
+$('#resetBtn').addEventListener('click',()=>{const b=$('#resetBtn');if(b.dataset.arm!=='1'){b.dataset.arm='1';b.textContent='Click again to reset';setTimeout(()=>{b.dataset.arm='';b.textContent='Reset to defaults';},3000);return;}store={status:{},steps:{}};save();b.dataset.arm='';b.textContent='Reset to defaults';renderDeliverables();renderSteps();});
+
+/* nav highlight */
+const links=[...document.querySelectorAll('#navLinks a')];
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+en.target.id));}});},{rootMargin:'-40% 0px -55% 0px'});document.querySelectorAll('main section').forEach(s=>io.observe(s));}
+
+renderGantt();renderDeliverables();renderSteps();renderPersonas();
+})();
+</script>
+
+</body></html>
