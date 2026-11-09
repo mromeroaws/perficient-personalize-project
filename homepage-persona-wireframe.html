@@ -1,0 +1,458 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Homepage Persona Wireframe</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,700;8..60,800&display=swap">
+<style>
+/* Layout: control bar on top, live site frame left, "what changed" / editor panel right; stacks on phones */
+:root{
+  --bg:#f3f5f7; --surface:#ffffff; --ink:#14212b; --muted:#56656f; --line:#d5dde3;
+  --ctl:#0b4a7a; --ctl-ink:#ffffff; --focus:#e07a12; --ok:#1d7a4f; --warn:#a35a00;
+  /* site-frame colors: the wireframe depicts aws.org, so these stay fixed in both themes */
+  --navy:#0a4a7a; --navy-2:#083c64; --green:#0b5352; --mint:#7ed9c4; --sky:#c9dcee; --pale:#e3ebf2; --white:#ffffff; --siteink:#14212b;
+  --display:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --ui:"Archivo", "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f161c; --surface:#17212a; --ink:#e6edf2; --muted:#9aaab6; --line:#2c3a46; --ctl:#3b8ad0; --ctl-ink:#06121c; --focus:#f2a24a; --ok:#5cc495; --warn:#f0b35c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f161c; --surface:#17212a; --ink:#e6edf2; --muted:#9aaab6; --line:#2c3a46; --ctl:#3b8ad0; --ctl-ink:#06121c; --focus:#f2a24a; --ok:#5cc495; --warn:#f0b35c; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;line-height:1.45}
+.wrap{max-width:1400px;margin:0 auto;padding-block:24px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font-family:var(--display);font-size:clamp(26px,3.4vw,38px);line-height:1.05;margin:0 0 6px;text-transform:uppercase;letter-spacing:.01em;text-wrap:balance}
+.lede{color:var(--muted);margin:0 0 20px;max-width:70ch}
+.controls{display:flex;flex-wrap:wrap;gap:18px 24px;align-items:flex-end;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.ctl label,.ctl .lab{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.seg{display:inline-flex;border:1px solid var(--ctl)}
+.seg button{font:600 12px/1 var(--ui);letter-spacing:.1em;text-transform:uppercase;padding:11px 16px;border:0;background:var(--surface);color:var(--ink);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ctl);color:var(--ctl-ink)}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);padding:9px 10px;border-radius:0;width:100%}
+.ctl select{min-width:220px}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.btn{font:700 12px/1 var(--ui);letter-spacing:.1em;text-transform:uppercase;padding:12px 16px;border:1px solid var(--ctl);background:var(--surface);color:var(--ink);cursor:pointer}
+.btn.primary{background:var(--ctl);color:var(--ctl-ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.small{padding:8px 10px;font-size:11px}
+.status{font-size:13px;color:var(--muted);min-height:1.4em}
+.status.ok{color:var(--ok)} .status.warn{color:var(--warn)}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:28px;align-items:start}
+@media (max-width:980px){.main{grid-template-columns:minmax(0,1fr)}}
+.tag{display:inline-block;background:var(--green);color:#fff;font:700 12px/1 var(--ui);letter-spacing:.12em;padding:7px 10px;margin-bottom:10px}
+
+/* ---------- site frame ---------- */
+.stage{display:flex;justify-content:center}
+.frame{width:100%;border:1px solid #9fb0bd;background:var(--white);color:var(--siteink);position:relative;overflow:hidden;font-family:var(--ui)}
+.frame.mobile{max-width:390px}
+.util{background:var(--navy);display:flex;align-items:center;gap:22px;padding:10px 22px;border-bottom:1px solid #2e6a98;color:#fff;font-size:14px}
+.util .sp{flex:1}
+.util .login{border:1px solid #fff;padding:6px 12px;font-weight:700}
+.nav{background:var(--navy);display:flex;align-items:center;gap:18px;padding:12px 22px;color:#fff;font-size:14px;flex-wrap:wrap}
+.logo{border:2px solid #fff;padding:6px 12px;font-weight:800;letter-spacing:.08em}
+.nav .sp{flex:1}
+.join{background:#fff;color:var(--navy);font-weight:700;letter-spacing:.08em;padding:9px 14px;font-size:13px}
+.burger{width:22px;height:2px;background:#fff;box-shadow:0 6px 0 #fff,0 -6px 0 #fff;margin-left:6px}
+.hero{display:grid;grid-template-columns:1fr 1fr;background:var(--navy)}
+.frame.mobile .hero{grid-template-columns:1fr}
+.hero.signedin{grid-template-columns:1.1fr .9fr;padding:30px 26px;gap:22px;align-items:start}
+.frame.mobile .hero.signedin{grid-template-columns:1fr;padding:24px 18px}
+.chooser{background:var(--green);padding:26px 22px;color:#fff}
+.frame.mobile .chooser{order:-1;padding:20px 16px}
+.chooser h2{font-family:var(--display);font-size:34px;margin:0;letter-spacing:.02em;display:flex;align-items:center;gap:12px}
+.chooser p{margin:4px 0 16px;font-size:14px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.frame.mobile .tiles{gap:8px}
+.tile{display:flex;align-items:center;gap:10px;background:#fff;color:var(--siteink);border:2px solid transparent;border-radius:10px;padding:14px 12px;font:600 14px/1.2 var(--ui);text-align:left;cursor:pointer;min-height:58px}
+.frame.mobile .tile{padding:10px;font-size:13px;min-height:48px}
+.tile svg{flex:none;width:22px;height:22px;stroke:var(--navy);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tile .chk{margin-left:auto;font-size:16px;visibility:hidden}
+.tile[aria-pressed="true"]{background:var(--mint);border-color:var(--siteink)}
+.tile[aria-pressed="true"] .chk{visibility:visible}
+.heroCopy{padding:28px 26px;color:#fff}
+.frame.mobile .heroCopy{padding:22px 18px}
+.hero.signedin .heroCopy{padding:0}
+.eyebrow{font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:13px;margin:0 0 8px}
+.heroCopy h3{font-family:var(--display);text-transform:uppercase;font-size:clamp(28px,3.2vw,42px);line-height:1.04;margin:0 0 12px;text-wrap:balance}
+.frame.mobile .heroCopy h3{font-size:28px}
+.heroCopy .sub{font-size:16px;margin:0 0 18px;max-width:42ch}
+.cta{display:inline-block;background:#fff;color:var(--siteink);font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:13px;padding:14px 20px;text-decoration:none;border:1px solid #fff}
+.cta.dark{background:var(--navy);color:#fff;border-color:var(--navy)}
+.cta:hover{outline:2px solid var(--mint)}
+.urlhint{display:block;font-size:11px;color:#b9d1e6;margin-top:6px;word-break:break-all}
+.photo{margin-top:18px;background:var(--sky);color:var(--navy);display:grid;place-items:center;text-align:center;font-weight:700;min-height:110px;border:1px solid #7fa4c4}
+.acct{background:#fff;color:var(--siteink);padding:18px 20px;border-left:4px solid var(--green)}
+.acct h4{margin:0 0 10px;font-size:16px}
+.acct .row{display:flex;justify-content:space-between;gap:12px;border-top:1px solid #dfe6ec;padding:9px 0;font-size:14px}
+.acct .row b{font-weight:700;text-align:right}
+.acct .cta{margin-top:10px}
+.ql{background:var(--pale);display:grid;grid-template-columns:auto auto minmax(0,1fr);align-items:center;gap:0;padding:18px 44px 18px 26px;position:relative}
+.ql>.lab{font-weight:800;letter-spacing:.06em;font-size:20px;text-transform:uppercase;color:var(--siteink);padding-right:22px;border-right:1px solid #9fb0bd;align-self:stretch;display:flex;align-items:center}
+.qlh{font-weight:800;letter-spacing:.1em;font-size:12px;text-transform:uppercase;margin:0 0 10px;color:var(--siteink)}
+.uni{padding:0 22px;border-right:1px solid #9fb0bd;align-self:stretch}
+.ucards{display:flex;gap:10px}
+.ucard{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:92px;min-height:76px;padding:8px 6px;background:#fff;border:1px solid #b9c7d2;border-radius:8px;color:var(--siteink);text-decoration:none;font-weight:700;font-size:13px;line-height:1.15;text-align:center}
+.ucard svg{width:22px;height:22px;stroke:var(--navy);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ucard:hover{border-color:var(--navy)}
+.rec{padding-left:22px;min-width:0;align-self:start}
+.reclinks{display:flex;flex-wrap:wrap;gap:8px 0;align-items:center}
+.reclinks a{color:var(--navy);font-weight:700;font-size:14px}
+.reclinks .sep{color:#7d93a6;padding:0 12px}
+.ritem{white-space:nowrap;display:inline-flex;align-items:center}
+.frame.mobile .ql{grid-template-columns:1fr;gap:14px;padding:16px 16px}
+.frame.mobile .ql>.lab{border-right:0;padding:0;font-size:17px}
+.frame.mobile .uni{padding:0;border-right:0}
+.frame.mobile .ucards{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.frame.mobile .ucard{width:auto;font-size:11px;min-height:64px}
+.frame.mobile .rec{padding-left:0}
+.mem{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;background:var(--sky);padding:28px 26px 90px;position:relative}
+.frame.mobile .mem{grid-template-columns:1fr;padding-bottom:96px}
+.mem h3{font-family:var(--display);text-transform:uppercase;color:var(--navy);font-size:28px;margin:0 0 8px}
+.mem p{margin:0 0 16px;color:var(--siteink);max-width:46ch}
+.mem .photo{margin:0;background:var(--pale)}
+.search{position:absolute;left:50%;transform:translateX(-50%);bottom:16px;width:min(560px,calc(100% - 32px));display:flex;background:#fff;border:1px solid #7d93a6;box-shadow:0 6px 18px rgba(10,40,70,.18)}
+.search span{flex:1;padding:12px 14px;color:#6b7c88;font-size:14px}
+.search i{width:44px;background:var(--navy)}
+.badge{display:inline-grid;place-items:center;width:26px;height:26px;background:#fff;color:var(--siteink);border:2px solid var(--siteink);font:800 12px/1 var(--ui);flex:none}
+.badge.abs{position:absolute;right:10px;top:10px}
+.hl{box-shadow:inset 0 0 0 3px var(--focus)}
+.ed{outline:1px dashed currentColor;outline-offset:2px;cursor:text;min-width:2ch;display:inline-block}
+.ed:hover{outline-style:solid}
+.ed:focus{outline:2px solid var(--focus);outline-offset:2px}
+a.ed,.cta.ed{cursor:text}
+.edhint{background:#fff6e8;color:#5a3500;border-bottom:1px solid #e9c38d;padding:8px 22px;font-size:13px}
+div.tile{cursor:pointer}
+
+/* ---------- side panel ---------- */
+.panel{background:var(--surface);border:1px solid var(--line);padding:20px}
+.panel h2{font-family:var(--display);text-transform:uppercase;font-size:30px;line-height:1;margin:0 0 6px}
+.panel .intro{font-weight:600;margin:0 0 14px}
+.changes{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.changes li{display:grid;grid-template-columns:30px 1fr;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.changes .badge{background:var(--surface);color:var(--ink);border-color:var(--ink)}
+.changes h3{margin:0 0 4px;font-size:16px}
+.changes p{margin:0;color:var(--muted);font-size:14px}
+fieldset{border:0;border-top:1px solid var(--line);padding:14px 0 6px;margin:0;display:grid;gap:10px;min-width:0}
+legend{font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;padding:0 0 6px}
+legend .badge{width:22px;height:22px;font-size:11px;background:var(--surface);color:var(--ink);border-color:var(--ink)}
+.f label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.qlrow{display:grid;grid-template-columns:1fr 1.3fr auto;gap:6px;align-items:end}
+.qlrow .btn{padding:9px 9px}
+.err{color:#b3261e;font-size:12px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;position:sticky;bottom:0;background:var(--surface);padding:12px 0 4px;border-top:1px solid var(--line)}
+.prio{border-top:1px solid var(--line);padding-top:14px;margin-top:4px}
+.prio h3{margin:0 0 4px;font-size:16px}
+.prio p{margin:0;font-size:14px}
+.note{font-size:12px;color:var(--muted);margin:8px 0 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <h1>Homepage Persona Wireframe</h1>
+  <p class="lede">Wireframe of the aws.org homepage personalization MVP. Switch persona, device and sign-in state to preview each version. Turn on <b>Edit content</b>, then click any outlined text in the preview to change it in place: role tiles, quick links, button text, headlines and labels. Links and longer settings are in the side panel. Saved changes are shared with everyone who opens this page.</p>
+
+  <div class="controls" role="toolbar" aria-label="Preview controls">
+    <div class="ctl"><span class="lab">Device</span>
+      <div class="seg" id="segDevice"><button type="button" data-v="desktop" aria-pressed="true">Desktop</button><button type="button" data-v="mobile" aria-pressed="false">Mobile</button></div></div>
+    <div class="ctl"><span class="lab">Visitor</span>
+      <div class="seg" id="segVisitor"><button type="button" data-v="out" aria-pressed="true">Signed out</button><button type="button" data-v="in" aria-pressed="false">Signed in</button></div></div>
+    <div class="ctl"><span class="lab">Membership</span>
+      <div class="seg" id="segMember"><button type="button" data-v="non" aria-pressed="true">Non-member</button><button type="button" data-v="member" aria-pressed="false">Member</button></div></div>
+    <div class="ctl"><label for="persona">Persona</label><select id="persona"></select></div>
+    <div class="ctl"><span class="lab">Mode</span>
+      <div class="seg" id="segMode"><button type="button" data-v="view" aria-pressed="true">Preview</button><button type="button" data-v="edit" aria-pressed="false">Edit content</button></div></div>
+    <div class="status" id="status" role="status" aria-live="polite"></div>
+  </div>
+
+  <div class="main">
+    <section aria-label="Homepage preview">
+      <span class="tag">PROPOSED</span>
+      <div class="stage"><div class="frame" id="frame"></div></div>
+    </section>
+    <aside class="panel" id="panel" aria-label="Details"></aside>
+  </div>
+</div>
+
+<script>
+const ICONS={
+ welder:'<svg viewBox="0 0 24 24"><path d="M5 15a7 7 0 0 1 14 0v3H5z"/><path d="M8 13h8v3H8z"/></svg>',
+ student:'<svg viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg>',
+ inspector:'<svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="M15 15l6 6M7.5 10l2 2 3.5-4"/></svg>',
+ engineer:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>',
+ educator:'<svg viewBox="0 0 24 24"><path d="M3 5h7a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-7a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h7z"/></svg>',
+ supervisor:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-4 3-6 6-6s6 2 6 6M15 14c3 0 6 2 6 5"/></svg>',
+ researcher:'<svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6L4 19a1.5 1.5 0 0 0 1.3 2h13.4a1.5 1.5 0 0 0 1.3-2L14 9V3M7 15h10"/></svg>',
+ owner:'<svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5h6v2M3 12h18"/></svg>'
+};
+const UICONS={
+ search:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>',
+ account:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>',
+ renew:'<svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14-5l-2 2M4 4v4h4M4 13a8 8 0 0 0 14 5l2-2M20 20v-4h-4"/></svg>',
+ training:'<svg viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg>'};
+const AWS="https://www.aws.org";
+function role(o){return o}
+const DEFAULTS={labels:{chooserTitle:"I AM A…",chooserSub:"Pick your role and this page follows.",qlLabel:"Quick links",uniTitle:"Universal quick links (always available)",recPrefix:"Recommended for",welcome:"Welcome back, [First name]",join:"JOIN AWS",login:"Log in",search:"Search standards, certification, jobs"},
+universal:[{t:"Search",u:AWS+"/search-results/",i:"search"},{t:"My Account",u:"https://my.aws.org/",i:"account"},{t:"Renew Membership",u:AWS+"/membership/",i:"renew"},{t:"Find Training",u:AWS+"/certification-and-education/education/",i:"training"}],
+order:["inspector","welder","supervisor","engineer","student","educator","owner","researcher"],roles:{
+ inspector:{tile:"Inspector / Quality Professional",recFor:"inspectors",crm:"Inspector, Quality Control",persona:"Welding Inspector / QA-QC; Senior Inspector (SCWI holders)",
+  priorities:"CWI/SCWI certification and renewal; PDH training; welding codes and standards; inspection resources; technical publications.",
+  eyebrow:"CWI and SCWI",headline:"Keep Your Inspection Credentials Current",sub:"Certification renewal, PDH training, codes and standards, and inspection resources in one place.",ctaText:"Renew My Certification",ctaUrl:AWS+"/certification-and-education/professional-certification/certified-welding-inspector/",
+  cardTitle:"Your CWI",r1l:"CWI status",r1v:"[active, expires date]",r2l:"PDHs needed for renewal",r2v:"[number]",cardBtn:"Renew my certification",cardUrl:"https://my.aws.org/",
+  links:[{t:"CWI renewal",u:AWS+"/certification-and-education/professional-certification/certified-welding-inspector/"},{t:"SCWI path",u:AWS+"/certification-and-education/professional-certification/senior-certified-welding-inspector/"},{t:"PDH training",u:AWS+"/certification-and-education/education/"},{t:"Codes and standards",u:"https://pubs.aws.org/"}],
+  memNonT:"Individual Membership",memNonX:"Members save on CWI seminars, exams, renewal and PDH courses.",memNonB:"See member benefits",memNonU:AWS+"/membership/individuals/member/",
+  memT:"Your Membership",memX:"Use your member pricing on endorsements and PDH courses.",memB:"Browse PDH courses",memU:AWS+"/certification-and-education/education/"},
+ welder:{tile:"Welder",recFor:"welders",crm:"Welder; Technician",persona:"Welder / Experienced Welder",
+  priorities:"Certified Welder program; hands-on and online training; welding techniques; safety resources; career pathways.",
+  eyebrow:"Build your skills and credentials",headline:"Certified Welding Courses & Training",sub:"The Certified Welder program, hands-on and online training, safety resources and career pathways.",ctaText:"Advance My Welding Career",ctaUrl:AWS+"/certification-and-education/",
+  cardTitle:"Your certifications",r1l:"Certified Welder",r1v:"[status]",r2l:"Next eligible credential",r2v:"[name]",cardBtn:"View my credentials",cardUrl:"https://my.aws.org/",
+  links:[{t:"Certified Welder program",u:AWS+"/certification-and-education/professional-certification/certified-welder-program/"},{t:"Online training",u:AWS+"/certification-and-education/education/self-paced-online-learning/"},{t:"Safety resources",u:AWS+"/standards-and-publications/free-resources/"},{t:"Career pathways",u:AWS+"/career-resources/career-paths-in-welding/"}],
+  memNonT:"Individual Membership",memNonX:"Training, publications, and career resources for welders at every stage.",memNonB:"See member benefits",memNonU:AWS+"/membership/individuals/member/",
+  memT:"Your Membership",memX:"Renew early to keep your member pricing on certification and training.",memB:"Renew membership",memU:AWS+"/membership/"},
+ supervisor:{tile:"Manager / Supervisor",recFor:"managers",crm:"Manager, Supervisor",persona:"Supervisor / Welding Manager",
+  priorities:"Certified Welding Supervisor; workforce training; welder qualification; safety; applicable standards; automation; industry best practices.",
+  eyebrow:"Lead your welding team",headline:"Build a Stronger Welding Team",sub:"Supervisor certification, workforce training, welder qualification, safety and the standards your shop works to.",ctaText:"Improve My Team's Performance",ctaUrl:AWS+"/certification-and-education/professional-certification/certified-welding-supervisor/",
+  cardTitle:"Your team",r1l:"Team members certified",r1v:"[number]",r2l:"Certifications expiring in 90 days",r2v:"[number]",cardBtn:"View team status",cardUrl:"https://my.aws.org/",
+  links:[{t:"Certified Welding Supervisor",u:AWS+"/certification-and-education/professional-certification/certified-welding-supervisor/"},{t:"Workforce training",u:AWS+"/certification-and-education/education/in-person-training/"},{t:"Welder qualification",u:AWS+"/certification-and-education/professional-certification/certified-welder-program/"},{t:"Automation",u:AWS+"/certification-and-education/professional-certification/certified-robotic-arc-welding/"}],
+  memNonT:"Corporate Membership",memNonX:"Training discounts and standards access for your whole team.",memNonB:"Explore corporate membership",memNonU:AWS+"/membership/corporate/",
+  memT:"Your Membership",memX:"Add your team to a corporate membership.",memB:"Corporate membership",memU:AWS+"/membership/corporate/"},
+ engineer:{tile:"Welding Engineer",recFor:"engineers",crm:"Engineer",persona:"Welding Engineer",
+  priorities:"Welding codes and standards; welding procedures; metallurgy; design resources; research papers; engineering certifications.",
+  eyebrow:"Codes, procedures and metallurgy",headline:"Technical Resources for Welding Engineers",sub:"Codes and standards, welding procedures, metallurgy, design resources and the CWEng credential.",ctaText:"Find Technical Resources",ctaUrl:AWS+"/certification-and-education/professional-certification/certified-welding-engineer/",
+  cardTitle:"Your credentials",r1l:"CWEng",r1v:"[status]",r2l:"Standards subscription",r2v:"[status]",cardBtn:"View my credentials",cardUrl:"https://my.aws.org/",
+  links:[{t:"Codes and standards",u:"https://pubs.aws.org/"},{t:"Welding procedures",u:AWS+"/certification-and-education/education/self-paced-online-learning/wps-pqr-explained/"},{t:"Metallurgy",u:AWS+"/certification-and-education/education/self-paced-online-learning/metallurgy-i/"},{t:"CWEng certification",u:AWS+"/certification-and-education/professional-certification/certified-welding-engineer/"}],
+  memNonT:"Individual Membership",memNonX:"Welding Journal access, standards discounts and technical committees.",memNonB:"See member benefits",memNonU:AWS+"/membership/individuals/member/",
+  memT:"Your Membership",memX:"Join a technical committee and help write the standards you use.",memB:"Get involved",memU:AWS+"/about/get-involved/committees/"},
+ student:{tile:"Student",recFor:"students",crm:"Student",persona:"Student",
+  priorities:"Career pathways; scholarships; welding school locator; entry-level training; student membership; competitions; networking.",
+  eyebrow:"Start your welding career",headline:"Welding Careers Start Here",sub:"Career pathways, scholarships, welding schools near you and your first training.",ctaText:"Explore Welding Careers",ctaUrl:AWS+"/career-resources/career-paths-in-welding/",
+  cardTitle:"Your next steps",r1l:"Student membership",r1v:"[status]",r2l:"Scholarship application",r2v:"[status]",cardBtn:"Go to my account",cardUrl:"https://my.aws.org/",
+  links:[{t:"Career pathways",u:AWS+"/career-resources/career-paths-in-welding/"},{t:"Scholarships",u:AWS+"/career-resources/students/scholarships/national-scholarships/"},{t:"Find a welding school",u:"https://www.careersinwelding.com/"},{t:"Student membership",u:AWS+"/membership/"}],
+  memNonT:"Student Membership",memNonX:"Low-cost membership with scholarships, competitions, student chapters and networking.",memNonB:"Join as a student",memNonU:AWS+"/membership/",
+  memT:"Your Student Membership",memX:"Find a student chapter and apply for this year's scholarships.",memB:"See scholarships",memU:AWS+"/career-resources/students/scholarships/national-scholarships/"},
+ educator:{tile:"Educator / Instructor",recFor:"educators",crm:"Educator",persona:"Educator / Instructor",
+  priorities:"SENSE curriculum; instructional materials; educator certifications; school accreditation; professional development; scholarships.",
+  eyebrow:"For welding instructors",headline:"Teach the Next Generation of Welders",sub:"SENSE curriculum, instructional materials, educator certification and professional development.",ctaText:"Access Teaching Resources",ctaUrl:AWS+"/educators/",
+  cardTitle:"Your program",r1l:"CWE",r1v:"[status]",r2l:"SENSE school status",r2v:"[status]",cardBtn:"Manage my program",cardUrl:"https://my.aws.org/",
+  links:[{t:"SENSE curriculum",u:"https://www.senseonline.org/"},{t:"Educator certification (CWE)",u:AWS+"/certification-and-education/professional-certification/certified-welding-educator/"},{t:"Professional development",u:AWS+"/certification-and-education/education/self-paced-online-learning/instructional-strategies-for-welding-educators/"},{t:"Scholarships",u:AWS+"/career-resources/students/scholarships/national-scholarships/"}],
+  memNonT:"Individual Membership",memNonX:"Classroom resources, publications and a network of welding educators.",memNonB:"See member benefits",memNonU:AWS+"/membership/individuals/member/",
+  memT:"Your Membership",memX:"Bring your students in with student membership and chapters.",memB:"Student membership",memU:AWS+"/membership/"},
+ owner:{tile:"Business Owner / Executive",recFor:"business owners",crm:"Executive, Owner; Sales",persona:"Corporate Buyer / Employer; Industry Partner",
+  priorities:"Corporate membership; workforce development; company certifications and accreditation; standards; industry trends; automation; FABTECH.",
+  eyebrow:"Workforce and growth",headline:"Grow Your Welding Business",sub:"Corporate membership, workforce development, company certification and accreditation, standards and FABTECH.",ctaText:"Grow My Welding Business",ctaUrl:AWS+"/membership/corporate/",
+  cardTitle:"Your organization",r1l:"Corporate membership",r1v:"[status]",r2l:"Employees enrolled",r2v:"[number]",cardBtn:"Manage my organization",cardUrl:"https://my.aws.org/",
+  links:[{t:"Corporate membership",u:AWS+"/membership/corporate/"},{t:"Workforce development",u:AWS+"/certification-and-education/education/in-person-training/"},{t:"Standards",u:"https://pubs.aws.org/"},{t:"FABTECH",u:AWS+"/community-and-events/conferences-and-events/fabtech/"}],
+  memNonT:"Corporate Membership",memNonX:"Build capability and reduce risk with training and standards for your workforce.",memNonB:"Explore corporate membership",memNonU:AWS+"/membership/corporate/",
+  memT:"Your Corporate Membership",memX:"See your benefits and add employees to your account.",memB:"Manage benefits",memU:"https://my.aws.org/"},
+ researcher:{tile:"Researcher",recFor:"researchers",crm:"Researcher",persona:"Welding Researcher (new persona)",
+  priorities:"Welding Journal Research Supplement; peer-reviewed publications; research fellowships; technical committees; emerging technologies; conferences.",
+  eyebrow:"Research and emerging technology",headline:"Advance Welding Science",sub:"The Welding Journal Research Supplement, peer-reviewed publications, fellowships, technical committees and conferences.",ctaText:"Explore Welding Research",ctaUrl:AWS+"/magazines-and-media/welding-research-supplement/",
+  cardTitle:"Your research",r1l:"Welding Journal access",r1v:"[status]",r2l:"Committee memberships",r2v:"[number]",cardBtn:"View my account",cardUrl:"https://my.aws.org/",
+  links:[{t:"Research Supplement",u:AWS+"/magazines-and-media/welding-research-supplement/"},{t:"Publication archive",u:AWS+"/magazines-and-media/publication-archive/"},{t:"Technical committees",u:AWS+"/about/get-involved/committees/"},{t:"Conferences",u:AWS+"/community-and-events/conferences-and-events/"}],
+  memNonT:"Individual Membership",memNonX:"Welding Journal access, technical committees and conference discounts.",memNonB:"See member benefits",memNonU:AWS+"/membership/individuals/member/",
+  memT:"Your Membership",memX:"Present your work and join a technical committee.",memB:"Get involved",memU:AWS+"/about/get-involved/committees/"}
+}};
+
+const clone=o=>JSON.parse(JSON.stringify(o));
+let saved=clone(DEFAULTS);      // last version from the shared store (or defaults)
+let work=clone(DEFAULTS);       // what the preview and editor show
+let dirty=false, db=null, docRef=null, canSave=false, remoteNewer=false, saving=false;
+const ui={device:"desktop",visitor:"out",member:"non",persona:"welder",mode:"view",focus:null};
+
+const $=s=>document.querySelector(s);
+function h(tag,attrs,...kids){const e=document.createElement(tag);if(attrs)for(const[k,v]of Object.entries(attrs)){if(v==null||v===false)continue;if(k==="class")e.className=v;else if(k==="text")e.textContent=v;else if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else e.setAttribute(k,v===true?"":v)}for(const k of kids.flat()){if(k==null)continue;e.append(k.nodeType?k:document.createTextNode(k))}return e}
+function safeUrl(u){u=(u||"").trim();if(!u)return null;if(u.startsWith("/"))u=AWS+u;try{const p=new URL(u);return(p.protocol==="https:"||p.protocol==="http:")?p.href:null}catch(e){return null}}
+function link(text,url,cls){const s=safeUrl(url);return h("a",{class:cls,href:s||"#",target:s?"_blank":null,rel:"noopener",title:s||"No valid link yet","data-nolink":s?null:"1"},text)}
+function badge(n,abs){return h("span",{class:"badge"+(abs?" abs":""),"aria-label":"Area "+n},String(n))}
+function setStatus(msg,kind){const s=$("#status");s.textContent=msg||"";s.className="status"+(kind?" "+kind:"")}
+const R=()=>work.roles[ui.persona];
+const L=()=>work.labels;
+
+/* In Edit mode, make a preview element editable in place.
+   set(text) writes the model; syncId is the matching side-panel input, kept in step. */
+function E(el,set,syncId,label){
+  if(ui.mode!=="edit")return el;
+  el.contentEditable="true";el.spellcheck=true;el.classList.add("ed");
+  el.setAttribute("role","textbox");el.setAttribute("aria-label","Edit "+(label||"text"));
+  el.addEventListener("click",e=>{e.preventDefault();e.stopPropagation()});
+  el.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();el.blur()}if(e.key===" ")e.stopPropagation()});
+  el.addEventListener("paste",e=>{e.preventDefault();const t=(e.clipboardData?.getData("text/plain")||"").replace(/\s+/g," ");document.execCommand("insertText",false,t)});
+  el.addEventListener("input",()=>{const v=el.textContent.replace(/\s+/g," ");set(v);markDirty();const s=syncId&&document.getElementById(syncId);if(s&&s!==document.activeElement)s.value=v});
+  el.addEventListener("blur",()=>{const v=el.textContent.replace(/\s+/g," ").trim();set(v);if(el.textContent!==v)el.textContent=v});
+  return el;
+}
+const fid=k=>"f-"+ui.persona+"-"+k, lid=k=>"f-labels-"+k;
+
+function renderFrame(){
+  const f=$("#frame"), r=R(), lb=L(), mob=ui.device==="mobile", inn=ui.visitor==="in", edit=ui.mode==="edit";
+  f.className="frame"+(mob?" mobile":"");f.replaceChildren();
+  if(edit)f.append(h("div",{class:"edhint"},"Editing "+r.tile+". Click any outlined text to change it. Press Enter to finish. Links are in the side panel."));
+  const loginTxt=()=>E(h("span",{class:inn?"":"login"},inn?"My account":lb.login),v=>{lb.login=v},lid("login"),"Log in label");
+  if(!mob)f.append(h("div",{class:"util"},"About AWS","Magazines & Media","Businesses","Educators","Shop",h("span",{class:"sp"}),inn?h("span",{class:"login"},"My account"):E(h("span",{class:"login"},lb.login),v=>{lb.login=v},lid("login"),"Log in label")));
+  f.append(h("div",{class:"nav"},h("span",{class:"logo"},"AWS"),...(mob?[h("span",{class:"sp"}),inn?h("span",{},"Account"):E(h("span",{},lb.login),v=>{lb.login=v},lid("login"),"Log in label"),h("span",{class:"burger","aria-hidden":"true"})]:["Certification & Education","Membership","Community & Events","Career Resources","Standards & Publications",h("span",{class:"sp"}),E(h("span",{class:"join"},lb.join),v=>{lb.join=v},lid("join"),"Join button text")])));
+  const heroCopy=h("div",{class:"heroCopy"+(ui.focus==="hero"?" hl":"")},
+    inn?E(h("p",{class:"eyebrow"},lb.welcome),v=>{lb.welcome=v},lid("welcome"),"welcome line"):E(h("p",{class:"eyebrow"},r.eyebrow),v=>{r.eyebrow=v},fid("eyebrow"),"eyebrow"),
+    h("h3",{},E(h("span",{},r.headline),v=>{r.headline=v},fid("headline"),"headline")," ",badge(1)),
+    E(h("p",{class:"sub"},r.sub),v=>{r.sub=v},fid("sub"),"subheading"),
+    E(link(r.ctaText,r.ctaUrl,"cta"),v=>{r.ctaText=v},fid("ctaText"),"hero button text"),h("span",{class:"urlhint"},"Button link: "+(safeUrl(r.ctaUrl)||"not set")),
+    inn?null:h("div",{class:"photo"},"Hero photo",h("br"),"(unchanged)"));
+  if(inn){
+    const card=h("div",{class:"acct"+(ui.focus==="card"?" hl":"")},E(h("h4",{},r.cardTitle),v=>{r.cardTitle=v},fid("cardTitle"),"card title"),
+      h("div",{class:"row"},E(h("span",{},r.r1l),v=>{r.r1l=v},fid("r1l"),"row 1 label"),E(h("b",{},r.r1v),v=>{r.r1v=v},fid("r1v"),"row 1 value")),
+      h("div",{class:"row"},E(h("span",{},r.r2l),v=>{r.r2l=v},fid("r2l"),"row 2 label"),E(h("b",{},r.r2v),v=>{r.r2v=v},fid("r2v"),"row 2 value")),
+      E(link(r.cardBtn,r.cardUrl,"cta dark"),v=>{r.cardBtn=v},fid("cardBtn"),"card button text"));
+    f.append(h("div",{class:"hero signedin"},heroCopy,card));
+  }else{
+    const tiles=work.order.map(k=>{const t=work.roles[k];const pick=()=>{ui.persona=k;$("#persona").value=k;render()};
+      const lab=E(h("span",{},t.tile),v=>{t.tile=v;const o=$(`#persona option[value="${k}"]`);if(o)o.textContent=v||k},"f-"+k+"-tile","role tile "+t.tile);
+      const el=edit?h("div",{class:"tile",role:"button",tabindex:"0","aria-pressed":String(k===ui.persona),onclick:pick,onkeydown:e=>{if(e.target===e.currentTarget&&(e.key==="Enter"||e.key===" ")){e.preventDefault();pick()}}},h("span",{"aria-hidden":"true"}),lab,h("span",{class:"chk","aria-hidden":"true"},"✓"))
+                   :h("button",{type:"button",class:"tile","aria-pressed":String(k===ui.persona),onclick:pick},h("span",{"aria-hidden":"true"}),lab,h("span",{class:"chk","aria-hidden":"true"},"✓"));
+      el.firstChild.outerHTML=ICONS[k]||ICONS.welder;return el});
+    f.append(h("div",{class:"hero"},h("div",{class:"chooser"+(ui.focus==="tile"?" hl":"")},
+      h("h2",{},E(h("span",{},lb.chooserTitle),v=>{lb.chooserTitle=v},lid("chooserTitle"),"chooser title"),badge(2)),
+      E(h("p",{},lb.chooserSub),v=>{lb.chooserSub=v},lid("chooserSub"),"chooser subtitle"),h("div",{class:"tiles"},tiles)),heroCopy));
+  }
+  const ucards=work.universal.map((x,i)=>{const lab=E(h("span",{},x.t),v=>{x.t=v},`uq-${i}-t`,"universal link "+(i+1));const a=link("",x.u,"ucard");a.replaceChildren(h("span",{"aria-hidden":"true"}),lab);a.firstChild.outerHTML=UICONS[x.i]||UICONS.search;return a});
+  const shown=r.links.map((l,i)=>[l,i]).filter(([l])=>l.t||edit);
+  const recLinks=shown.map(([l,i],n)=>h("span",{class:"ritem"},E(link(l.t||"New link",l.u),v=>{l.t=v},`ql-${ui.persona}-${i}-t`,"recommended link "+(i+1)),n<shown.length-1?h("span",{class:"sep","aria-hidden":"true"},"|"):null));
+  f.append(h("div",{class:"ql"+(ui.focus==="links"?" hl":"")},
+    E(h("span",{class:"lab"},lb.qlLabel),v=>{lb.qlLabel=v},lid("qlLabel"),"quick links label"),
+    h("div",{class:"uni"},E(h("p",{class:"qlh"},lb.uniTitle),v=>{lb.uniTitle=v},lid("uniTitle"),"universal links title"),h("div",{class:"ucards"},ucards)),
+    h("div",{class:"rec"},h("p",{class:"qlh"},E(h("span",{},lb.recPrefix),v=>{lb.recPrefix=v},lid("recPrefix"),"recommended prefix")," ",E(h("span",{},r.recFor||r.tile),v=>{r.recFor=v},fid("recFor"),"recommended audience")),
+      h("div",{class:"reclinks"},recLinks,edit&&r.links.length<6?h("button",{type:"button",class:"btn small",style:"margin-left:12px",onclick:()=>{r.links.push({t:"New link",u:""});markDirty();render()}},"+ Add link"):null)),
+    badge(3,true)));
+  const nm=ui.member==="non", mk=nm?["memNonT","memNonX","memNonB"]:["memT","memX","memB"];
+  f.append(h("div",{class:"mem"+(ui.focus==="mem"?" hl":"")},badge(5,true),
+    h("div",{},E(h("h3",{},r[mk[0]]),v=>{r[mk[0]]=v},fid(mk[0]),"membership title"),E(h("p",{},r[mk[1]]),v=>{r[mk[1]]=v},fid(mk[1]),"membership text"),
+      E(link(r[mk[2]],nm?r.memNonU:r.memU,"cta dark"),v=>{r[mk[2]]=v},fid(mk[2]),"membership button text")),
+    h("div",{class:"photo"},"Photo"),
+    h("div",{class:"search","aria-label":"Sticky search (area 4)"},E(h("span",{},lb.search),v=>{lb.search=v},lid("search"),"search placeholder"),h("i",{"aria-hidden":"true"}),badge(4))));
+  f.querySelectorAll('a[data-nolink]').forEach(a=>a.addEventListener("click",e=>e.preventDefault()));
+  if(edit)f.querySelectorAll("a").forEach(a=>a.addEventListener("click",e=>e.preventDefault()));
+}
+
+function renderChanges(){
+  const p=$("#panel");p.replaceChildren(h("h2",{},"What changed"),h("p",{class:"intro"},ui.visitor==="in"?"A signed-in visitor gets their own status and next action.":"An unknown visitor picks a role and the page follows."),
+    h("ol",{class:"changes"},...[
+      ["Persona hero","Headline and button follow the visitor's CRM job function across eight personas. Welder stays the default, since its button already goes to the top content destination. Signed-in visitors also see an account card in place of the photo, with their status and next action."],
+      ["\"I am a…\" chooser","Signed-out visitors pick a role from eight equal buttons that share the top of the page with the hero: 50/50 on desktop, stacked above the hero on mobile. The choice sets the hero and shortcuts."],
+      ["Persona shortcuts","The jump-to bar becomes four shortcuts that follow the visitor's persona."],
+      ["Sticky search","Search leaves the header on both devices and floats over the page, pinned to the bottom of the screen as visitors scroll."],
+      ["Membership block by state","Non-members see the membership type that fits their persona. Members see a renewal or next-benefit message instead."]
+    ].map((c,i)=>h("li",{},h("span",{class:"badge"},String(i+1)),h("div",{},h("h3",{},c[0]),h("p",{},c[1]))))),
+    h("div",{class:"prio"},h("h3",{},"Content to prioritize for "+R().tile),h("p",{},R().priorities||"Not set yet."),h("p",{class:"note"},"CTA: "+R().ctaText+" · CRM job function: "+R().crm+" · Persona: "+R().persona)));
+}
+
+function field(label,key,opts={}){
+  const id="f-"+ui.persona+"-"+key, r=R();
+  const inp=opts.area?h("textarea",{id,rows:"2"}):h("input",{id,type:opts.url?"url":"text",placeholder:opts.ph||""});
+  inp.value=r[key]||"";
+  const err=h("div",{class:"err"});
+  const check=()=>{err.textContent=(opts.url&&inp.value.trim()&&!safeUrl(inp.value))?"Use a full https:// link or a path that starts with /":""};
+  check();
+  inp.addEventListener("focus",()=>{if(ui.focus!==opts.zone){ui.focus=opts.zone;renderFrame()}});
+  inp.addEventListener("input",()=>{r[key]=inp.value;markDirty();check();renderFrame()});
+  return h("div",{class:"f"},h("label",{for:id},label),inp,err);
+}
+function legend(n,t){return h("legend",{},n?badge(n):null,t)}
+function lfield(label,key){
+  const id=lid(key), inp=h("input",{id,type:"text"});inp.value=L()[key]||"";
+  inp.addEventListener("input",()=>{L()[key]=inp.value;markDirty();renderFrame();if(key==="tile")fillSelect()});
+  return h("div",{class:"f"},h("label",{for:id},label),inp);
+}
+
+function renderEditor(){
+  const p=$("#panel"), r=R();
+  const linksBox=h("div",{style:"display:grid;gap:8px"});
+  const drawLinks=()=>{linksBox.replaceChildren(...r.links.map((l,i)=>{
+    const t=h("input",{id:`ql-${ui.persona}-${i}-t`,type:"text","aria-label":`Quick link ${i+1} text`,placeholder:"Link text"});t.value=l.t;
+    const u=h("input",{id:`ql-${ui.persona}-${i}-u`,type:"url","aria-label":`Quick link ${i+1} URL`,placeholder:"https://… or /path"});u.value=l.u;
+    const err=h("div",{class:"err",style:"grid-column:1/-1"});const chk=()=>{err.textContent=(u.value.trim()&&!safeUrl(u.value))?"Use a full https:// link or a path that starts with /":""};chk();
+    [t,u].forEach(x=>x.addEventListener("focus",()=>{if(ui.focus!=="links"){ui.focus="links";renderFrame()}}));
+    t.addEventListener("input",()=>{l.t=t.value;markDirty();renderFrame()});
+    u.addEventListener("input",()=>{l.u=u.value;markDirty();chk();renderFrame()});
+    const rm=h("button",{type:"button",class:"btn small","aria-label":`Remove quick link ${i+1}`,onclick:()=>{r.links.splice(i,1);markDirty();drawLinks();renderFrame()}},"✕");
+    return h("div",{class:"qlrow"},t,u,rm,err)}),
+    h("button",{type:"button",class:"btn small",disabled:r.links.length>=6,onclick:()=>{r.links.push({t:"",u:""});markDirty();drawLinks();renderFrame();linksBox.querySelector(`#ql-${ui.persona}-${r.links.length-1}-t`)?.focus()}},"+ Add quick link"),
+    h("p",{class:"note"},"Up to 6 links. The mockup shows 4."))};
+  drawLinks();
+  const sel=$("#persona");
+  p.replaceChildren(
+    h("h2",{},"Edit "+r.tile),
+    h("p",{class:"intro"},"Changes show in the preview as you type. Save to share them."),
+    h("fieldset",{},legend(1,"Hero banner"),field("Eyebrow (signed out)","eyebrow",{zone:"hero"}),field("Headline","headline",{zone:"hero"}),field("Subheading","sub",{zone:"hero",area:true}),
+      h("div",{class:"two"},field("Button text","ctaText",{zone:"hero"}),field("Button link","ctaUrl",{zone:"hero",url:true,ph:"https://www.aws.org/…"}))),
+    h("fieldset",{},legend(null,"Signed-in account card"),field("Card title","cardTitle",{zone:"card"}),
+      h("div",{class:"two"},field("Row 1 label","r1l",{zone:"card"}),field("Row 1 value","r1v",{zone:"card"})),
+      h("div",{class:"two"},field("Row 2 label","r2l",{zone:"card"}),field("Row 2 value","r2v",{zone:"card"})),
+      h("div",{class:"two"},field("Button text","cardBtn",{zone:"card"}),field("Button link","cardUrl",{zone:"card",url:true}))),
+    h("fieldset",{},legend(2,"Role tile and CRM match"),field("Role (tile label)","tile",{zone:"tile"}),field("Content to prioritize","priorities",{zone:"tile",area:true}),field("CRM job function(s)","crm",{zone:"tile"}),field("Persona","persona",{zone:"tile"})),
+    h("fieldset",{},legend(3,"Recommended quick links (this role)"),field("Recommended for (audience)","recFor",{zone:"links"}),linksBox),
+    h("fieldset",{},legend(3,"Universal quick links (all roles)"),lfield("Section title","uniTitle"),...work.universal.map((x,i)=>{
+      const t=h("input",{id:`uq-${i}-t`,type:"text","aria-label":`Universal link ${i+1} text`});t.value=x.t;
+      const u=h("input",{id:`uq-${i}-u`,type:"url","aria-label":`Universal link ${i+1} URL`,placeholder:"https://… or /path"});u.value=x.u;
+      const err=h("div",{class:"err",style:"grid-column:1/-1"});const chk=()=>{err.textContent=(u.value.trim()&&!safeUrl(u.value))?"Use a full https:// link or a path that starts with /":""};chk();
+      t.addEventListener("input",()=>{x.t=t.value;markDirty();renderFrame()});u.addEventListener("input",()=>{x.u=u.value;markDirty();chk();renderFrame()});
+      return h("div",{class:"qlrow",style:"grid-template-columns:1fr 1.3fr"},t,u,err)})),
+    h("fieldset",{},legend(5,"Membership block"),h("p",{class:"note",style:"margin:0"},"Non-member version"),field("Title","memNonT",{zone:"mem"}),field("Text","memNonX",{zone:"mem",area:true}),
+      h("div",{class:"two"},field("Button text","memNonB",{zone:"mem"}),field("Button link","memNonU",{zone:"mem",url:true})),
+      h("p",{class:"note",style:"margin:6px 0 0"},"Member version"),field("Title","memT",{zone:"mem"}),field("Text","memX",{zone:"mem",area:true}),
+      h("div",{class:"two"},field("Button text","memB",{zone:"mem"}),field("Button link","memU",{zone:"mem",url:true}))),
+    h("fieldset",{},legend(null,"Page labels (all roles)"),
+      h("div",{class:"two"},lfield("Chooser title","chooserTitle"),lfield("Quick links label","qlLabel")),
+      lfield("Chooser subtitle","chooserSub"),lfield("Recommended links prefix","recPrefix"),lfield("Signed-in welcome line","welcome"),
+      h("div",{class:"two"},lfield("Join button","join"),lfield("Log in button","login")),
+      lfield("Search placeholder","search")),
+    h("div",{class:"actions"},
+      h("button",{type:"button",class:"btn primary",id:"saveBtn",disabled:!dirty||saving,onclick:save},saving?"Saving…":"Save changes"),
+      h("button",{type:"button",class:"btn",disabled:!dirty,onclick:()=>{work=clone(saved);dirty=false;remoteNewer=false;setStatus("Changes discarded.");render()}},"Discard"),
+      h("button",{type:"button",class:"btn",onclick:()=>{work.roles[ui.persona]=clone(DEFAULTS.roles[ui.persona]);markDirty();setStatus("Reset "+r.tile+" to the original text. Save to keep it.");render()}},"Reset role"),
+      h("button",{type:"button",class:"btn",onclick:copyJson},"Copy as JSON")),
+    h("p",{class:"note"},canSave?"Saved changes are shared with everyone who can open this page.":"Saving to the shared copy is not available in this view. Your edits stay in this browser until you reload; use Copy as JSON to keep them.")
+  );
+  // refresh tile label in select when edited
+  sel.querySelector(`option[value="${ui.persona}"]`).textContent=r.tile;
+}
+
+function markDirty(){if(!dirty){dirty=true;const b=$("#saveBtn");if(b)b.disabled=false}setStatus(remoteNewer?"Someone else saved a newer version. Saving will replace it.":"Unsaved changes",remoteNewer?"warn":"");try{localStorage.setItem("wf-draft",JSON.stringify(work))}catch(e){}}
+async function copyJson(){const txt=JSON.stringify(work,null,2);try{await navigator.clipboard.writeText(txt);setStatus("Copied all content as JSON.","ok")}catch(e){const ta=h("textarea",{rows:"6","aria-label":"Content as JSON"});ta.value=txt;$("#panel").append(ta);ta.select();setStatus("Select and copy the JSON at the bottom of the panel.","warn")}}
+async function save(){
+  if(!docRef){setStatus("Saving needs a signed-in claude.ai view of this page. Use Copy as JSON to keep your edits.","warn");return}
+  saving=true;render();
+  try{const body=clone(work);body.updatedAt=new Date().toISOString();await docRef.set(body);saved=clone(work);dirty=false;remoteNewer=false;try{localStorage.removeItem("wf-draft")}catch(e){};setStatus("Saved. Everyone who opens this page now sees these changes.","ok")}
+  catch(e){setStatus(e&&e.code==="permission_denied"?"You can view this page but not save to it. Ask the owner for edit access.":"Couldn't save ("+(e&&e.code||"error")+"). Your edits are still here; try again.","warn")}
+  saving=false;render();
+}
+
+function render(){
+  for(const[id,key]of[["segDevice","device"],["segVisitor","visitor"],["segMember","member"],["segMode","mode"]])
+    document.querySelectorAll(`#${id} button`).forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===ui[key])));
+  if(ui.mode!=="edit")ui.focus=null;
+  renderFrame();
+  if(ui.mode==="edit")renderEditor();else renderChanges();
+}
+function fillSelect(){const s=$("#persona");s.replaceChildren(...work.order.map(k=>h("option",{value:k},work.roles[k].tile)));s.value=ui.persona}
+for(const[id,key]of[["segDevice","device"],["segVisitor","visitor"],["segMember","member"],["segMode","mode"]])
+  document.querySelectorAll(`#${id} button`).forEach(b=>b.addEventListener("click",()=>{ui[key]=b.dataset.v;render()}));
+$("#persona").addEventListener("change",e=>{ui.persona=e.target.value;ui.focus=null;render()});
+
+function normalize(d){const out=clone(DEFAULTS);if(!d||!d.roles)return out;if(Array.isArray(d.universal))out.universal=out.universal.map((x,i)=>d.universal[i]?{...x,t:String(d.universal[i].t??x.t),u:String(d.universal[i].u??x.u)}:x);if(d.labels&&typeof d.labels==="object")for(const k of Object.keys(out.labels))if(typeof d.labels[k]==="string")out.labels[k]=d.labels[k];for(const k of out.order){if(d.roles[k])out.roles[k]={...out.roles[k],...d.roles[k],links:Array.isArray(d.roles[k].links)?d.roles[k].links.map(l=>({t:String(l.t||""),u:String(l.u||"")})):out.roles[k].links}}return out}
+
+fillSelect();render();
+setStatus("Loading saved content…");
+(async()=>{
+  try{db=await window.claude?.use?.("db")}catch(e){db=null}
+  if(!db){setStatus("Showing the original content. Shared saving isn't available in this view.","warn");try{const d=JSON.parse(localStorage.getItem("wf-draft")||"null");if(d){work=normalize(d);dirty=true;fillSelect();render();setStatus("Restored your unsaved draft from this browser.","warn")}}catch(e){}return}
+  docRef=db.doc("wireframe/homepage");canSave=true;render();
+  const timer=setTimeout(()=>setStatus("Can't reach the saved content yet. Showing the original text.","warn"),10000);
+  docRef.onSnapshot(snap=>{
+    if(!snap.metadata.fromCache)clearTimeout(timer);
+    const incoming=snap.exists?normalize(snap.data()):clone(DEFAULTS);
+    if(JSON.stringify(incoming)===JSON.stringify(saved)){if(!snap.metadata.fromCache&&!dirty&&!saving)setStatus(snap.exists?"Showing the latest saved content.":"No saved changes yet. Showing the original text.");return}
+    saved=incoming;
+    if(dirty){remoteNewer=true;setStatus("Someone else saved a newer version. Discard to load it, or save to replace it.","warn")}
+    else{work=clone(saved);fillSelect();render();if(!snap.metadata.fromCache)setStatus("Showing the latest saved content.")}
+  },err=>{clearTimeout(timer);setStatus("Saved content isn't available ("+(err&&err.code||"error")+"). Showing the original text.","warn")});
+})();
+</script>
+
+</body></html>
